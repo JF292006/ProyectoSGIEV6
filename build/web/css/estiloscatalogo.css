@@ -1,0 +1,172 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 2/07/2025, 11:02:37 p. m.
+    Author     : Obaho Asesores
+*/
+
+:root {
+  --primary: #4CAF50;
+  --secondary: #81C784;
+  --background: #F1F8E9;
+  --accent: #A5D6A7;
+  --text-dark: #2E7D32;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--background);
+  color: var(--text-dark);
+}
+
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: var(--primary);
+  color: white;
+  padding: 2rem;
+  border-bottom: 4px solid var(--accent);
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.textos-header {
+  flex: 1;
+  text-align: center;
+}
+
+.logo-derecha {
+  width: 100px;
+  height: auto;
+}
+
+.main {
+  flex: 1;
+}
+
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+}
+
+@media (max-width: 992px) {
+  .catalogo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .catalogo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.producto {
+  background-color: white;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.producto:hover {
+  transform: scale(1.03);
+}
+
+.producto img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.precio {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+footer {
+  background-color: var(--secondary);
+  text-align: center;
+  padding: 1rem;
+  color: white;
+  margin-top: auto;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: 'Segoe UI', sans-serif;
+    top: 50%;
+    transform: translateY(-50%);
+    
+}
+
+.dropbtn {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dropbtn:hover {
+    background-color: #219150;
+    transform: scale(1.03);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 180px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.dropdown-content a {
+    color: #2c3e50;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #e9f5ee;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
