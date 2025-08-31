@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Panel de Operario - Tienda Naturista</title>
+    <h:outputStylesheet library="css" name="estilosadmin.css"/>
+</h:head>
+
+<h:body>
+    <!-- CABECERA -->
+    <header>
+        <div class="logo-container">
+            <h:graphicImage library="estilos" name="logo.png" styleClass="logo"/>
+            <h1>Panel de Operario</h1>
+        </div>
+
+        <div class="user-info">
+            <span class="admin-name">
+                Operario Activo: 
+                <h:outputText value="#{usuariosBean.usuarios.p_nombre}"/>
+            </span>
+
+            <h:form>
+                <p:commandButton value="Cerrar Sesión"
+                                 styleClass="logout-btn"
+                                 action="#{usuariosBean.cerrarSesion()}"
+                                 ajax="false"/>
+            </h:form>
+        </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <main class="admin-dashboard">
+        <div class="dashboard-grid">
+
+            <div class="dashboard-module ventas">
+                <div class="module-icon">📊</div>
+                <h2>Gestionar Ventas</h2>
+                <p>Administra y visualiza tus ventas diarias, semanales y mensuales</p>
+                <h:link outcome="/venta/listar" value="Ir a Ventas" styleClass="module-link"/>
+            </div>
+
+            <div class="dashboard-module usuarios">
+                <div class="module-icon">👥</div>
+                <h2>Gestionar Usuarios</h2>
+                <p>Administra clientes registrados</p>
+                <h:link outcome="/usuario/listar" value="Ir a Usuarios" styleClass="module-link"/>
+            </div>
+
+            <div class="dashboard-module envios">
+                <div class="module-icon">📝</div>
+                <h2>Gestionar Productos</h2>
+                <p>Controla y gestiona tus productos</p>
+                <h:link outcome="/producto/listar" value="Ir a Productos" styleClass="module-link"/>
+            </div>
+
+            <div class="dashboard-module inventario">
+                <div class="module-icon">📦</div>
+                <h2>Gestionar Inventario</h2>
+                <p>Mantén un control preciso de tus productos y existencias</p>
+                <h:link outcome="/inventario/listar" value="Ir a Inventario" styleClass="module-link"/>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Panel Operario</h3>
+            </div>
+            <div class="system-info">
+                <p>© 2024 Tienda Naturista - Sistema de Administración</p>
+            </div>
+        </div>
+    </footer>
+</h:body>
+</html>

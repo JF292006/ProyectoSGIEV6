@@ -24,6 +24,10 @@ public class Usuarios {
         this.direccion = direccion;
         this.fecha_nacimiento = fecha_nacimiento;
     }
+
+    public Usuarios() {
+  
+    }
     
     
     
