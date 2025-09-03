@@ -5,11 +5,12 @@ import java.util.Date;
 
 public class Usuarios {
     
-    private int id_usuario, num_identificacion, telefono, salario;
+    private int id_usuario, num_identificacion;
+    private long telefono, salario;
     private String tipo_usu, clave, p_nombre, s_nombre, p_apellido, s_apellido, correo, direccion;
     private Date fecha_nacimiento;
 
-    public Usuarios(int id_usuario, int num_identificacion, int telefono, int salario, String tipo_usu, String clave, String p_nombre, String s_nombre, String p_apellido, String s_apellido, String correo, String direccion, Date fecha_nacimiento) {
+    public Usuarios(int id_usuario, int num_identificacion, long telefono, long salario, String tipo_usu, String clave, String p_nombre, String s_nombre, String p_apellido, String s_apellido, String correo, String direccion, Date fecha_nacimiento) {
         this.id_usuario = id_usuario;
         this.num_identificacion = num_identificacion;
         this.telefono = telefono;
@@ -47,19 +48,19 @@ public class Usuarios {
         this.num_identificacion = num_identificacion;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
-    public int getSalario() {
+    public long getSalario() {
         return salario;
     }
 
-    public void setSalario(int salario) {
+    public void setSalario(long salario) {
         this.salario = salario;
     }
 

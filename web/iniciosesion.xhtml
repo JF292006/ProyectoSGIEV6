@@ -1,88 +1,39 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Inicio de Sesión - Tienda Naturista</title>
-        <h:outputStylesheet library="css" name="estilosinicios.css"/>
-        <link rel="stylesheet" 
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-        <style>
-            .close-btn {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: none;
-                border: none;
-                font-size: 22px;
-                color: #444;
-                cursor: pointer;
-                transition: color 0.3s, transform 0.2s;
-            }
-            .close-btn:hover {
-                color: #e53935;
-                transform: scale(1.2);
-            }
-            .login-form {
-                position: relative;
-            }
-        </style>
-    </h:head>
+<h:head>
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" type="text/css" href="resources/css/estilosinicios.css"/>
+</h:head>
 
-    <h:body>
-        <div class="login-container">
-            <div class="login-form">
-                <!-- Botón de cerrar -->
-                <h:form>
-                    <p:commandButton styleClass="close-btn" 
-                                     icon="pi pi-times"
-                                     title="Volver"
-                                     action="index?faces-redirect=true"
-                                     immediate="true"
-                                     ajax="false"/>
-                </h:form>
-
-                <!-- Logo y título -->
-                <div class="logo-container">
-                    <h:graphicImage library="estilos" name="logo.png" styleClass="logo"/>
-                    <h1>Iniciar Sesión</h1>
-                </div>
-
-                <!-- Formulario de Login -->
-                <h:form id="loginForm">
-                    <p:messages id="msgs" closable="true"/>
-
-                    <div class="form-group">
-                        <p:outputLabel for="usuario" value="Correo"/>
-                        <p:inputText id="usuario" value="#{usuariosBean.usuarios.correo}" 
-                                     placeholder="Ingresa tu correo"
-                                     required="true" 
-                                     requiredMessage="El correo es obligatorio"
-                                     style="width:100%"/>
-                    </div>
-
-                    <div class="form-group password-container">
-                        <p:outputLabel for="contrasena" value="Contraseña"/>
-                        <p:password id="contrasena" value="#{usuariosBean.usuarios.clave}"
-                                    feedback="false"
-                                    placeholder="Ej. 1234567890"
-                                    required="true" 
-                                    requiredMessage="La contraseña es obligatoria"
-                                    style="width:100%"/>
-                        <!-- toggleMask="true" -->
-                    </div>
-
-                    <p:commandButton value="Iniciar Sesión" 
-                                     action="#{usuariosBean.autenticar()}"
-                                     update="msgs"
-                                     styleClass="btn-login"
-                                     ajax="false"/>
-                </h:form>
+<h:body>
+    <div class="login-container">
+        <div class="login-card">
+            
+     
+            <div class="logo">
+                <img src="resources/images/logo.png" alt="Romar Natural" />
             </div>
+            
+            <h2>Iniciar Sesión</h2>
+            
+            <h:form>
+                <div class="input-group">
+                    <label for="correo">Correo *</label>
+                    <h:inputText id="correo" value="#{usuariosBean.usuarios.correo}" required="true"/>
+                </div>
+                
+                <div class="input-group">
+                    <label for="contrasena">Contraseña *</label>
+                    <h:inputSecret id="contrasena" value="#{usuariosBean.usuarios.clave}" required="true"/>
+                </div>
+                
+                <div class="boton">
+                    <h:commandButton value="Iniciar Sesión" action="#{usuariosBean.autenticar}"/>
+                </div>  
+            </h:form>
         </div>
-    </h:body>
+    </div>
+</h:body>
 </html>

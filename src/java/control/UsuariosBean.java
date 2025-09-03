@@ -2,18 +2,31 @@
 package control;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import modelo.Usuarios;
 
 @ManagedBean
-public class UsuariosBean {
+@ViewScoped
+public class UsuariosBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     Usuarios usuarios = new Usuarios();
+    private List<Usuarios> listaUsuarios = new ArrayList<>();
+    
+    @PostConstruct
+    public void init() {
+        listarUsuarios();
+    }
 
     public Usuarios getUsuarios() {
         return usuarios;
@@ -21,6 +34,11 @@ public class UsuariosBean {
 
     public void setUsuarios(Usuarios usuarios) {
         this.usuarios = usuarios;
+    }
+    
+    public List<Usuarios> getListaUsuarios() {
+        listarUsuarios(); 
+        return listaUsuarios;
     }
     
     public void autenticar(){
@@ -72,4 +90,38 @@ public class UsuariosBean {
             } catch (IOException ex) {                
             }
     }
+    
+    public void listarUsuarios() {
+        listaUsuarios = new ArrayList<>();
+        try (Connection con = ConDB.conectar()) {
+            String sql = "SELECT id_usuario, tipo_usu, p_nombre, p_apellido, telefono, salario FROM usuarios";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuarios u = new Usuarios();
+                u.setId_usuario(rs.getInt("id_usuario"));
+                u.setTipo_usu(rs.getString("tipo_usu"));
+                u.setP_nombre(rs.getString("p_nombre"));
+                u.setP_apellido(rs.getString("p_apellido"));
+                u.setTelefono(rs.getLong("telefono"));
+                u.setSalario(rs.getLong("salario"));
+
+                listaUsuarios.add(u);
+            }
+        } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error listando usuarios", e.getMessage()));
+        }
+    }
+    
+    public void volverAdmin() {
+    try {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
+
 }
