@@ -123,5 +123,73 @@ public class UsuariosBean implements Serializable {
     }
 }
     
+    public void irAgregarUsuario() {
+        try {
+            usuarios = new Usuarios();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("agregarusuario.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+     public void guardarUsuario() {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "INSERT INTO usuarios (num_identificacion, tipo_usu, clave, p_nombre, s_nombre, p_apellido, s_apellido, correo, telefono, salario, fecha_nacimiento, direccion) "
+                       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, usuarios.getNum_identificacion());
+            ps.setString(2, usuarios.getTipo_usu());
+
+            
+            String pw = Utilidades.encriptar(usuarios.getClave());
+            ps.setString(3, pw);
+
+            ps.setString(4, usuarios.getP_nombre());
+            ps.setString(5, usuarios.getS_nombre());
+            ps.setString(6, usuarios.getP_apellido());
+            ps.setString(7, usuarios.getS_apellido());
+            ps.setString(8, usuarios.getCorreo());
+            ps.setLong(9, usuarios.getTelefono());
+            ps.setLong(10, usuarios.getSalario());
+
+            
+            if (usuarios.getFecha_nacimiento() != null) {
+                ps.setDate(11, new java.sql.Date(usuarios.getFecha_nacimiento().getTime()));
+            } else {
+                ps.setDate(11, null);
+            }
+
+            ps.setString(12, usuarios.getDireccion());
+
+            ps.executeUpdate();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario registrado correctamente", null));
+
+           
+            listarUsuarios();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("listarusuarios.xhtml");
+
+        } catch (SQLException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error registrando usuario", e.getMessage()));
+        }
+    }
+     
+     public void volverListado() {
+    try {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("listarusuarios.xhtml");
+    } catch (IOException e) {
+        e.printStackTrace();
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo volver al listado", e.getMessage()));
+    }
+}
+
+
+    
+    
+    
 
 }

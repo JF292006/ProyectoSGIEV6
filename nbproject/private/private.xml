@@ -12,12 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/web/admin.xhtml</file>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/web/resources/css/estilosadmin.css</file>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/web/listarusuarios.xhtml</file>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/src/java/control/UsuariosBean.java</file>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/web/iniciosesion.xhtml</file>
-            <file>file:/C:/Users/User/Documents/SGIEV/ProyectoSGIEV6/src/java/modelo/Usuarios.java</file>
+            <file>file:/C:/Users/adminsena/Documents/ProyectoSGIEV6/web/agregarusuario.xhtml</file>
+            <file>file:/C:/Users/adminsena/Documents/ProyectoSGIEV6/src/java/control/UsuariosBean.java</file>
+            <file>file:/C:/Users/adminsena/Documents/ProyectoSGIEV6/web/admin.xhtml</file>
+            <file>file:/C:/Users/adminsena/Documents/ProyectoSGIEV6/web/listarusuarios.xhtml</file>
         </group>
     </open-files>
 </project-private>

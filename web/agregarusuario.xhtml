@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Agregar Usuario</title>
+        <h:outputStylesheet library="css" name="estilosadmin.css"/>
+    </h:head>
+
+    <h:body>
+        <header>
+            <div class="logo-container">
+                <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+                <h1>Panel de Administración</h1>
+            </div>
+
+            <div class="user-info">
+                <h:form>
+                    <p:commandButton value="Volver"
+                                     styleClass="logout-btn"
+                                     action="#{usuariosBean.volverListado}"
+                                     ajax="false"/>
+                </h:form>
+            </div>
+        </header>
+
+        <main class="admin-dashboard">
+            <h2 style="text-align:center; margin-bottom:20px;">Agregar Usuario</h2>
+
+            <h:form id="formAgregar">
+                <p:panelGrid columns="2" styleClass="form-grid" columnClasses="label, value">
+
+                    <h:outputLabel value="Identificación:" for="num_identificacion"/>
+                    <p:inputText id="num_identificacion" value="#{usuariosBean.usuarios.num_identificacion}" required="true"/>
+
+                    <h:outputLabel value="Tipo Usuario:" for="tipo_usu"/>
+                    <p:selectOneMenu id="tipo_usu" value="#{usuariosBean.usuarios.tipo_usu}" required="true">
+                        <f:selectItem itemLabel="Seleccione un tipo" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="Administrador" itemValue="administrador"/>
+                        <f:selectItem itemLabel="Operario" itemValue="operario"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Clave:" for="clave"/>
+                    <p:password id="clave" value="#{usuariosBean.usuarios.clave}" required="true"/>
+
+                    <h:outputLabel value="Primer Nombre:" for="p_nombre"/>
+                    <p:inputText id="p_nombre" value="#{usuariosBean.usuarios.p_nombre}" required="true"/>
+
+                    <h:outputLabel value="Segundo Nombre:" for="s_nombre"/>
+                    <p:inputText id="s_nombre" value="#{usuariosBean.usuarios.s_nombre}"/>
+
+                    <h:outputLabel value="Primer Apellido:" for="p_apellido"/>
+                    <p:inputText id="p_apellido" value="#{usuariosBean.usuarios.p_apellido}" required="true"/>
+
+                    <h:outputLabel value="Segundo Apellido:" for="s_apellido"/>
+                    <p:inputText id="s_apellido" value="#{usuariosBean.usuarios.s_apellido}"/>
+
+                    <h:outputLabel value="Correo:" for="correo"/>
+                    <p:inputText id="correo" value="#{usuariosBean.usuarios.correo}" required="true"/>
+
+                    <h:outputLabel value="Teléfono:" for="telefono"/>
+                    <p:inputText id="telefono" value="#{usuariosBean.usuarios.telefono}" required="true"/>
+
+                    <h:outputLabel value="Salario:" for="salario"/>
+                    <p:inputText id="salario" value="#{usuariosBean.usuarios.salario}" required="true"/>
+
+                    <h:outputLabel value="Fecha Nacimiento:" for="fecha_nacimiento"/>
+                    <p:datePicker id="fecha_nacimiento" value="#{usuariosBean.usuarios.fecha_nacimiento}" pattern="yyyy-MM-dd"/>
+
+                    <h:outputLabel value="Dirección:" for="direccion"/>
+                    <p:inputText id="direccion" value="#{usuariosBean.usuarios.direccion}" size="40"/>
+                </p:panelGrid>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <p:commandButton value="Guardar"
+                                     styleClass="logout-btn"
+                                     action="#{usuariosBean.guardarUsuario}"
+                                     ajax="false"/>
+                </div>
+            </h:form>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Panel Administrativo</h3>
+                </div>
+                <div class="system-info">
+                    <p>© 2025 Tienda Naturista - Sistema de Administración</p>
+                </div>
+            </div>
+        </footer>
+    </h:body>
+</html>

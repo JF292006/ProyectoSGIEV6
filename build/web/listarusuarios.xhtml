@@ -33,6 +33,13 @@
             <h2 style="text-align:center; margin-bottom:20px;">Gestión de Usuarios</h2>
 
             <h:form>
+                
+                <div style="margin-bottom:15px; text-align:right;">
+                    <p:commandButton value="Agregar Usuario"
+                                     styleClass="logout-btn"
+                                     action="#{usuariosBean.irAgregarUsuario()}"
+                                     ajax="false"/>
+                </div>
                 <p:dataTable value="#{usuariosBean.listaUsuarios}" var="u"
              paginator="true" rows="5"
              scrollable="true" scrollWidth="100%"
@@ -67,7 +74,7 @@
                     <h3>Panel Administrativo</h3>
                 </div>
                 <div class="system-info">
-                    <p>© 2024 Tienda Naturista - Sistema de Administración</p>
+                    <p>© 2025 Tienda Naturista - Sistema de Administración</p>
                 </div>
             </div>
         </footer>
