@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Gestión de Proveedores</title>
+    <h:outputStylesheet library="css" name="estiloscrudadmin.css"/>
+</h:head>
+<h:body>
+
+    <h1 class="title">Gestión de Proveedores - Tienda Naturista</h1>
+
+    <h:panelGroup styleClass="navbar">
+        <p:commandButton value="Ir a Panel" action="/vistas/operario/ope.xhtml?faces-redirect=true"/>
+        <p:commandButton value="Ir a Productos" action="/producto/index.xhtml?faces-redirect=true"/>
+        <p:commandButton value="Ir a Inventario" action="/vistas/operario/crudinventario.xhtml?faces-redirect=true"/>
+        <p:commandButton value="Ir a Usuarios" action="/vistas/operario/crudadmin.xhtml?faces-redirect=true"/>
+    </h:panelGroup>
+
+    <h:form id="listaProvForm">
+        <p:button value="Agregar Proveedor" outcome="nuevoprov.xhtml" styleClass="add-btn"/>
+        <p:messages id="msgs" showDetail="true" />
+
+        <p:dataTable id="tablaProvs" value="#{proveedorBean.lstProvs}" var="prov" style="margin-top:20px;">
+            <p:column headerText="ID">
+                <h:outputText value="#{prov.idproveedor}" />
+            </p:column>
+
+            <p:column headerText="Nombre">
+                <h:outputText value="#{prov.nombre_proveedor}" />
+            </p:column>
+
+            <p:column headerText="Teléfono">
+                <h:outputText value="#{prov.telefono}" />
+            </p:column>
+
+            <p:column headerText="Correo">
+                <h:outputText value="#{prov.correo_proveedor}" />
+            </p:column>
+
+            <p:column headerText="Dirección">
+                <h:outputText value="#{prov.direccion}" />
+            </p:column>
+
+            <p:column headerText="Acciones">
+                <p:commandButton value="Editar" icon="pi pi-pencil"
+                                 actionListener="#{proveedorBean.editar(prov)}"
+                                 update=":formEditar" oncomplete="PF('dlgEditar').show()"/>
+                <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                 actionListener="#{proveedorBean.eliminar(prov)}"
+                                 update=":listaProvForm:tablaProvs"
+                                 onclick="return confirm('¿Eliminar este proveedor?')"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    
+    <p:dialog header="Editar Proveedor" widgetVar="dlgEditar" modal="true" resizable="false" id="dlgEditar">
+        <h:form id="formEditar">
+            <h:panelGrid columns="2">
+                <h:outputLabel for="nombre" value="Nombre:"/>
+                <p:inputText id="nombre" value="#{proveedorBean.proveedor.nombre_proveedor}" required="true"/>
+
+                <h:outputLabel for="telefono" value="Teléfono:"/>
+                <p:inputText id="telefono" value="#{proveedorBean.proveedor.telefono}" required="true"/>
+
+                <h:outputLabel for="correo" value="Correo:"/>
+                <p:inputText id="correo" value="#{proveedorBean.proveedor.correo_proveedor}" required="true"/>
+
+                <h:outputLabel for="direccion" value="Dirección:"/>
+                <p:inputText id="direccion" value="#{proveedorBean.proveedor.direccion}" required="true"/>
+            </h:panelGrid>
+
+            <p:commandButton value="Actualizar"
+                             actionListener="#{proveedorBean.actualizar}"
+                             update=":listaProvForm:tablaProvs, :listaProvForm:msgs"
+                             oncomplete="PF('dlgEditar').hide()" />
+        </h:form>
+    </p:dialog>
+
+</h:body>
+</html>

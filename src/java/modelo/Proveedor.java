@@ -3,7 +3,8 @@ package modelo;
 
 public class Proveedor {
     
-    private int idproveedor, telefono;
+    private int idproveedor;
+    private long telefono;
     private String nombre_proveedor, correo_proveedor, direccion;
 
     public int getIdproveedor() {
@@ -14,11 +15,11 @@ public class Proveedor {
         this.idproveedor = idproveedor;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 

@@ -6,7 +6,14 @@ public class Producto {
     private int idproducto, proveedor_idproveedor;
     private double precio_producto;
     private String nombre_producto, descripcion_producto, nombre_tipo, registrosanitario;
+    Proveedor prov = new Proveedor();
 
+    public Proveedor getProv() {
+        return prov;
+    }
+    public void setProv(Proveedor prov) {
+        this.prov = prov;
+    }
     public int getIdproducto() {
         return idproducto;
     }

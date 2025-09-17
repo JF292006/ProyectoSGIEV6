@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Gestión de Productos</title>
+        <h:outputStylesheet library="css" name="estiloscrudadmin.css"/>
+    </h:head>
+    <h:body>
+
+        <h1 class="title">Gestión de Productos - Tienda Naturista</h1>
+
+        
+        <h:panelGroup styleClass="navbar">
+            <p:commandButton value="Ir a Panel" action="/vistas/operario/ope.xhtml?faces-redirect=true"/>
+            <p:commandButton value="Ir a Ventas" action="/vistas/operario/crudventa.xhtml?faces-redirect=true"/>
+            <p:commandButton value="Ir a Inventario" action="/vistas/operario/crudinventario.xhtml?faces-redirect=true"/>
+            <p:commandButton value="Ir a Usuarios" action="/vistas/operario/crudadmin.xhtml?faces-redirect=true"/>
+        </h:panelGroup>
+
+        <h:form id="nuevoprod">
+            <p:commandButton value="Agregar" action="nuevoprod.xhtml"
+                             styleClass="add-btn"/>
+
+            
+            <p:dataTable id="tablaProds" value="#{productoBean.lstProds}" var="producto" style="margin-top:20px;" editable="true">
+                <p:column headerText="ID">
+                    <h:outputText value="#{producto.idproducto}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{producto.nombre_producto}"/>
+                </p:column>
+                <p:column headerText="Precio">
+                    <h:outputText value="#{producto.precio_producto}"/>
+                </p:column>
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{producto.descripcion_producto}"/>
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{producto.nombre_tipo}"/>
+                </p:column>
+                <p:column headerText="Registro Sanitario">
+                    <h:outputText value="#{producto.registrosanitario}"/>
+                </p:column>
+                <p:column headerText="Proveedor">
+                    <h:outputText value="#{producto.prov.nombre_proveedor}"/>
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{productoBean.editar(producto)}"
+                                     update=":formEditar" oncomplete="PF('dlgEditar').show()"/>
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" 
+                                     actionListener="#{productoBean.eliminar(producto)}"
+                                     update="@form" 
+                                     onclick="return confirm('¿Eliminar este producto?')"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+
+        
+        <p:dialog header="Editar Producto" widgetVar="dlgEditar" modal="true" resizable="false" id="dlgEditar">
+            <h:form id="formEditar">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" value="#{productoBean.producto.nombre_producto}" required="true"/>
+
+                    <h:outputLabel for="precio" value="Precio:"/>
+                    <p:inputText id="precio" value="#{productoBean.producto.precio_producto}" required="true"/>
+
+                    <h:outputLabel for="descripcion" value="Descripción:"/>
+                    <p:inputText id="descripcion" value="#{productoBean.producto.descripcion_producto}"/>
+
+                    <h:outputLabel for="tipo" value="Tipo:"/>
+                    <p:inputText id="tipo" value="#{productoBean.producto.nombre_tipo}" required="true"/>
+
+                    <h:outputLabel for="registro" value="Registro Sanitario:"/>
+                    <p:inputText id="registro" value="#{productoBean.producto.registrosanitario}" required="true"/>
+
+                    <h:outputLabel for="proveedor" value="Proveedor:"/>
+                    <p:inputText id="proveedor" value="#{productoBean.producto.proveedor_idproveedor}" required="true"/>
+                </h:panelGrid>
+
+                <p:commandButton value="Actualizar"
+                                 actionListener="#{productoBean.actualizar}"
+                                 update=":nuevoprod:tablaProds"
+                                 oncomplete="PF('dlgEditar').hide()" />
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>
+</html>
+
