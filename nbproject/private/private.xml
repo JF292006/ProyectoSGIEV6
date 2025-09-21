@@ -12,11 +12,11 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/modelo/Producto.java</file>
-            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/dao/ProveedorDAO.java</file>
-            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/control/ProveedorBean.java</file>
-            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/web/proveedor/index.xhtml</file>
-            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/web/proveedor/nuevoprov.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV-20250630T174722Z-1-001/ProyectoSGIEV6/web/index.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV-20250630T174722Z-1-001/ProyectoSGIEV6/web/proveedor/nuevoprov.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV-20250630T174722Z-1-001/ProyectoSGIEV6/web/agregarusuario.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV-20250630T174722Z-1-001/ProyectoSGIEV6/web/admin.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV-20250630T174722Z-1-001/ProyectoSGIEV6/web/listarusuarios.xhtml</file>
         </group>
     </open-files>
 </project-private>

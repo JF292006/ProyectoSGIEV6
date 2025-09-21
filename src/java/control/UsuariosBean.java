@@ -12,12 +12,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import modelo.Usuarios;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class UsuariosBean implements Serializable {
     private static final long serialVersionUID = 1L;
     Usuarios usuarios = new Usuarios();
@@ -186,6 +187,130 @@ public class UsuariosBean implements Serializable {
             new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo volver al listado", e.getMessage()));
     }
 }
+     
+     public void editarUsuario(Usuarios u) {
+    try (Connection con = ConDB.conectar()) {
+        String sql = "SELECT id_usuario, num_identificacion, tipo_usu, p_nombre, s_nombre, p_apellido, s_apellido, correo, telefono, salario, fecha_nacimiento, direccion " +
+                     "FROM usuarios WHERE id_usuario = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, u.getId_usuario());
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Usuarios usuarioCompleto = new Usuarios();
+            usuarioCompleto.setId_usuario(rs.getInt("id_usuario"));
+            usuarioCompleto.setNum_identificacion(rs.getInt("num_identificacion"));
+            usuarioCompleto.setTipo_usu(rs.getString("tipo_usu"));
+            usuarioCompleto.setP_nombre(rs.getString("p_nombre"));
+            usuarioCompleto.setS_nombre(rs.getString("s_nombre"));
+            usuarioCompleto.setP_apellido(rs.getString("p_apellido"));
+            usuarioCompleto.setS_apellido(rs.getString("s_apellido"));
+            usuarioCompleto.setCorreo(rs.getString("correo"));
+            usuarioCompleto.setTelefono(rs.getLong("telefono"));
+            usuarioCompleto.setSalario(rs.getLong("salario"));
+            usuarioCompleto.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
+            usuarioCompleto.setDireccion(rs.getString("direccion"));
+            // NO cargamos la clave por seguridad
+
+            this.usuarios = usuarioCompleto; // asignamos el usuario completo al bean
+        }
+
+        FacesContext.getCurrentInstance().getExternalContext().redirect("editarusuario.xhtml");
+
+    } catch (SQLException | IOException e) {
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cargar usuario", e.getMessage()));
+    }
+}
+
+
+    public void actualizarUsuario() {
+    try (Connection con = ConDB.conectar()) {
+
+        String sql;
+        PreparedStatement ps;
+
+        if (usuarios.getClave() != null && !usuarios.getClave().isEmpty()) {
+            // Si escribió una nueva clave → se actualiza todo incluyendo clave
+            sql = "UPDATE usuarios SET num_identificacion=?, tipo_usu=?, clave=?, p_nombre=?, s_nombre=?, p_apellido=?, s_apellido=?, correo=?, telefono=?, salario=?, fecha_nacimiento=?, direccion=? WHERE id_usuario=?";
+            ps = con.prepareStatement(sql);
+
+            ps.setLong(1, usuarios.getNum_identificacion());
+            ps.setString(2, usuarios.getTipo_usu());
+            String pw = Utilidades.encriptar(usuarios.getClave());
+            ps.setString(3, pw);
+            ps.setString(4, usuarios.getP_nombre());
+            ps.setString(5, usuarios.getS_nombre());
+            ps.setString(6, usuarios.getP_apellido());
+            ps.setString(7, usuarios.getS_apellido());
+            ps.setString(8, usuarios.getCorreo());
+            ps.setLong(9, usuarios.getTelefono());
+            ps.setLong(10, usuarios.getSalario());
+
+            if (usuarios.getFecha_nacimiento() != null) {
+                ps.setDate(11, new java.sql.Date(usuarios.getFecha_nacimiento().getTime()));
+            } else {
+                ps.setDate(11, null);
+            }
+
+            ps.setString(12, usuarios.getDireccion());
+            ps.setInt(13, usuarios.getId_usuario());
+
+        } else {
+            // Si NO escribió clave → no se toca el campo clave
+            sql = "UPDATE usuarios SET num_identificacion=?, tipo_usu=?, p_nombre=?, s_nombre=?, p_apellido=?, s_apellido=?, correo=?, telefono=?, salario=?, fecha_nacimiento=?, direccion=? WHERE id_usuario=?";
+            ps = con.prepareStatement(sql);
+
+            ps.setLong(1, usuarios.getNum_identificacion());
+            ps.setString(2, usuarios.getTipo_usu());
+            ps.setString(3, usuarios.getP_nombre());
+            ps.setString(4, usuarios.getS_nombre());
+            ps.setString(5, usuarios.getP_apellido());
+            ps.setString(6, usuarios.getS_apellido());
+            ps.setString(7, usuarios.getCorreo());
+            ps.setLong(8, usuarios.getTelefono());
+            ps.setLong(9, usuarios.getSalario());
+
+            if (usuarios.getFecha_nacimiento() != null) {
+                ps.setDate(10, new java.sql.Date(usuarios.getFecha_nacimiento().getTime()));
+            } else {
+                ps.setDate(10, null);
+            }
+
+            ps.setString(11, usuarios.getDireccion());
+            ps.setInt(12, usuarios.getId_usuario());
+        }
+
+        ps.executeUpdate();
+
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario actualizado correctamente", null));
+
+        listarUsuarios();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("listarusuarios.xhtml");
+
+    } catch (SQLException | IOException e) {
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error actualizando usuario", e.getMessage()));
+    }
+}
+
+    public void eliminarUsuario(int id) {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "DELETE FROM usuarios WHERE id_usuario=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario eliminado correctamente", null));
+
+            listarUsuarios();
+        } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error eliminando usuario", e.getMessage()));
+        }
+    }
 
 
     

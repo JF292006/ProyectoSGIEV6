@@ -60,9 +60,18 @@
     <p:column headerText="Teléfono">
         <h:outputText value="#{u.telefono}"/>
     </p:column>
-    <p:column headerText="Salario">
-        <h:outputText value="#{u.salario}"/>
-    </p:column>
+    <p:column headerText="Acciones">
+    <p:commandButton value="Editar"
+                     action="#{usuariosBean.editarUsuario(u)}"
+                     ajax="false"
+                     styleClass="btn-accion" />
+
+    <p:commandButton value="Eliminar"
+                     action="#{usuariosBean.eliminarUsuario(u.id_usuario)}"
+                     ajax="false"
+                     styleClass="btn-accion"
+                     onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
+</p:column>
 </p:dataTable>
 
             </h:form>

@@ -8,8 +8,8 @@
     <h:head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Agregar Usuario</title>
-        <h:outputStylesheet library="css" name="estilosadmin.css"/> 
+        <title>Editar Usuario</title>
+        <h:outputStylesheet library="css" name="estilosadmin.css"/>
     </h:head>
 
     <h:body>
@@ -30,9 +30,9 @@
         </header>
 
         <main class="admin-dashboard">
-            <h2 style="text-align:center; margin-bottom:20px;">Agregar Usuario</h2>
+            <h2 style="text-align:center; margin-bottom:20px;">Editar Usuario</h2>
 
-            <h:form id="formAgregar">
+            <h:form id="formEditar">
                 <p:panelGrid columns="2" styleClass="form-grid" columnClasses="label, value">
 
                     <h:outputLabel value="Identificación:" for="num_identificacion"/>
@@ -46,7 +46,7 @@
                     </p:selectOneMenu>
 
                     <h:outputLabel value="Clave:" for="clave"/>
-                    <p:password id="clave" value="#{usuariosBean.usuarios.clave}" required="true"/>
+                    <p:password id="clave" value="#{usuariosBean.usuarios.clave}"/>
 
                     <h:outputLabel value="Primer Nombre:" for="p_nombre"/>
                     <p:inputText id="p_nombre" value="#{usuariosBean.usuarios.p_nombre}" required="true"/>
@@ -77,9 +77,9 @@
                 </p:panelGrid>
 
                 <div style="text-align:center; margin-top:20px;">
-                    <p:commandButton value="Guardar"
+                    <p:commandButton value="Actualizar"
                                      styleClass="logout-btn"
-                                     action="#{usuariosBean.guardarUsuario}"
+                                     action="#{usuariosBean.actualizarUsuario}"
                                      ajax="false"/>
                 </div>
             </h:form>
