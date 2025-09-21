@@ -3,8 +3,9 @@ package modelo;
 
 public class Mensajeria {
     
-    private int idmensajeria, tel_mensajeria;
+    private int idmensajeria;
     private String nombre_mensajeria, direccion_mensajeria, cobertura;
+    private long tel_mensajeria;
 
     public int getIdmensajeria() {
         return idmensajeria;
@@ -14,11 +15,11 @@ public class Mensajeria {
         this.idmensajeria = idmensajeria;
     }
 
-    public int getTel_mensajeria() {
+    public long getTel_mensajeria() {
         return tel_mensajeria;
     }
 
-    public void setTel_mensajeria(int tel_mensajeria) {
+    public void setTel_mensajeria(long tel_mensajeria) {
         this.tel_mensajeria = tel_mensajeria;
     }
 

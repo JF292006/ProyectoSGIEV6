@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Listado de Mensajerías</title>
+        <h:outputStylesheet library="css" name="estilosadmin.css"/>
+    </h:head>
+
+    <h:body>
+        <header>
+            <div class="logo-container">
+                <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+                <h1>Panel de Administración</h1>
+            </div>
+
+            <div class="user-info">
+                <h:form>
+                    <p:commandButton value="Volver"
+                                     styleClass="logout-btn"
+                                     action="#{mensajeriaBean.volverMyE()}"
+                                     ajax="false"/>
+                </h:form>
+            </div>
+        </header>
+
+        <main class="admin-dashboard">
+            <h2 style="text-align:center; margin-bottom:20px;">Gestión de Mensajerías</h2>
+
+            <h:form>
+                <div style="margin-bottom:15px; text-align:right;">
+                    <p:commandButton value="Agregar Mensajería"
+                                     styleClass="logout-btn"
+                                     action="#{mensajeriaBean.irAgregarMensajeria()}"
+                                     ajax="false"/>
+                </div>
+
+                <p:dataTable value="#{mensajeriaBean.listaMensajeria}" var="m"
+                             paginator="true" rows="5"
+                             
+                             styleClass="tabla-usuarios">
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{m.idmensajeria}"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{m.nombre_mensajeria}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{m.tel_mensajeria}"/>
+                    </p:column>
+                    <p:column headerText="Dirección">
+                        <h:outputText value="#{m.direccion_mensajeria}"/>
+                    </p:column>
+                    <p:column headerText="Cobertura">
+                        <h:outputText value="#{m.cobertura}"/>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Editar"
+                                         action="#{mensajeriaBean.editarMensajeria(m)}"
+                                         ajax="false"
+                                         styleClass="btn-accion"/>
+
+                        <p:commandButton value="Eliminar"
+                                         action="#{mensajeriaBean.eliminarMensajeria(m.idmensajeria)}"
+                                         ajax="false"
+                                         styleClass="btn-accion"
+                                         onclick="return confirm('¿Seguro que deseas eliminar esta mensajería?');"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Panel Administrativo</h3>
+                </div>
+                <div class="system-info">
+                    <p>© 2025 Tienda Naturista - Sistema de Administración</p>
+                </div>
+            </div>
+        </footer>
+    </h:body>
+</html>
