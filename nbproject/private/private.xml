@@ -12,6 +12,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/envios/agregarEnvio.xhtml</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/control/EnviosBean.java</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/dao/EnviosDAO.java</file>
@@ -21,6 +22,16 @@
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/envios/listarEnvios.xhtml</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/modelo/Envio.java</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/envios/editarEnvio.xhtml</file>
+=======
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/web/producto/index.xhtml</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/dao/ProductoDAO.java</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/web/admin.xhtml</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/control/ProductoBean.java</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/web/producto/nuevoprod.xhtml</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/control/ProveedorBean.java</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/modelo/Mensajeria.java</file>
+            <file>file:/C:/Users/User/Desktop/ProyectoSGIEV6/src/java/modelo/Proveedor.java</file>
+>>>>>>> 39b52e5 (Crud producto con PDF)
         </group>
     </open-files>
 </project-private>

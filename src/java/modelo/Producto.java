@@ -5,9 +5,17 @@ public class Producto {
     
     private int idproducto, proveedor_idproveedor;
     private double precio_producto;
-    private String nombre_producto, descripcion_producto, nombre_tipo, registrosanitario;
+    private String nombre_producto, descripcion_producto, nombre_tipo, registrosanitario, nom_prov;
     Proveedor prov = new Proveedor();
 
+    public String getNom_prov() {
+        return nom_prov;
+    }
+
+    public void setNom_prov(String nom_prov) {
+        this.nom_prov = nom_prov;
+    }
+    
     public Proveedor getProv() {
         return prov;
     }
