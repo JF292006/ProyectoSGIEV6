@@ -16,6 +16,11 @@
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/control/EnviosBean.java</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/dao/EnviosDAO.java</file>
             <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/control/ConDB.java</file>
+            <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/control/Utilidades.java</file>
+            <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/mensajeria/listarMensajeria.xhtml</file>
+            <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/envios/listarEnvios.xhtml</file>
+            <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/src/java/modelo/Envio.java</file>
+            <file>file:/C:/Users/User/Music/ahora%20si/ProyectoSGIEV6/web/envios/editarEnvio.xhtml</file>
         </group>
     </open-files>
 </project-private>

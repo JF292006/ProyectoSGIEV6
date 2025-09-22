@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Editar Envío</title>
+    <h:outputStylesheet library="css" name="estilosadmin.css"/>
+</h:head>
+
+<h:body>
+    <header>
+        <div class="logo-container">
+            <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+            <h1>Panel de Administración</h1>
+        </div>
+    </header>
+
+    <main class="admin-dashboard">
+        <h2 style="text-align:center; margin-bottom:20px;">Editar Envío</h2>
+
+        <h:form id="formEditarEnvio">
+
+            <!-- Mensajes de validación -->
+            <p:messages id="msgs" closable="true" />
+
+            <!-- ID oculto -->
+            <h:inputHidden value="#{enviosBean.envio.idenvio}" />
+
+            <div class="form-group">
+                <h:outputLabel value="Estado:" for="estado"/>
+                <p:inputText id="estado" value="#{enviosBean.envio.estado_envio}" required="true" />
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Fecha de Envío:" for="fechaEnvio"/>
+                <p:calendar id="fechaEnvio" value="#{enviosBean.envio.fecha_envio}" pattern="yyyy-MM-dd" required="true"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Fecha de Entrega:" for="fechaEntrega"/>
+                <p:calendar id="fechaEntrega" value="#{enviosBean.envio.fecha_entrega}" pattern="yyyy-MM-dd"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Dirección de Salida:" for="dirSalida"/>
+                <p:inputText id="dirSalida" value="#{enviosBean.envio.direccion_salida}" required="true"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Dirección de Entrega:" for="dirEntrega"/>
+                <p:inputText id="dirEntrega" value="#{enviosBean.envio.direccion_envio}" required="true"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Observaciones:" for="obs"/>
+                <p:inputTextarea id="obs" value="#{enviosBean.envio.observaciones}" rows="3" cols="30"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Novedades:" for="novedad"/>
+                <p:inputTextarea id="novedad" value="#{enviosBean.envio.novedades}" rows="3" cols="30"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Mensajería:" for="mensajeria"/>
+                <p:selectOneMenu id="mensajeria" value="#{enviosBean.envio.fk_mensajeria}" required="true">
+                    <f:selectItem itemLabel="Seleccione una mensajería" noSelectionOption="true"/>
+                    <f:selectItems value="#{enviosBean.listaMensajerias}" var="m"
+                                   itemLabel="#{m.nombre_mensajeria}" itemValue="#{m.idmensajeria}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="form-group" style="text-align:right; margin-top:20px;">
+                <p:commandButton value="Actualizar"
+                                 action="#{enviosBean.actualizarEnvio}"
+                                 styleClass="btn btn-success me-2 px-4"
+                                 ajax="false"/>
+                <p:button value="Volver"
+                          outcome="/envios/listarEnvios.xhtml"
+                          styleClass="btn btn-secondary me-2 px-4"/>
+            </div>
+        </h:form>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="system-info">
+                <p>© 2025 Tienda Naturista - Sistema de Administración</p>
+            </div>
+        </div>
+    </footer>
+</h:body>
+</html>

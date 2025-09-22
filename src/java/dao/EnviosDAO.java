@@ -40,4 +40,34 @@ public class EnviosDAO {
             ps.executeUpdate();
         }
     }
+    
+    public boolean editarEnvio(Envio e) {
+        String sql = "UPDATE envio SET estado_envio=?, fecha_envio=?, fecha_entrega=?, "
+                + "direccion_salida=?, direccion_envio=?, observaciones=?, novedades=?, fk_mensajeria=? "
+                + "WHERE idenvio=?";
+
+        try (Connection con = ConDB.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, e.getEstado_envio());
+            ps.setDate(2, (e.getFecha_envio() != null) ? new java.sql.Date(e.getFecha_envio().getTime()) : null);
+            ps.setDate(3, (e.getFecha_entrega() != null) ? new java.sql.Date(e.getFecha_entrega().getTime()) : null);
+            ps.setString(4, e.getDireccion_salida());
+            ps.setString(5, e.getDireccion_envio());
+            ps.setString(6, e.getObservaciones());
+            ps.setString(7, e.getNovedades());
+            ps.setInt(8, e.getFk_mensajeria());
+
+            // Aquí va el ID del envío que quieres modificar
+            ps.setInt(9, e.getIdenvio());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 }
