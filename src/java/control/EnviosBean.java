@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import dao.EnviosDAO;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -27,6 +27,8 @@ public class EnviosBean implements Serializable {
     private Envio envio = new Envio();
     private List<Envio> listaEnvios = new ArrayList<>();
     private List<Mensajeria> listaMensajerias = new ArrayList<>();
+    private EnviosDAO enviosDAO = new EnviosDAO(); // ✅ aquí declaras el DAO
+
 
     @PostConstruct
     public void init() {
@@ -127,105 +129,73 @@ public class EnviosBean implements Serializable {
     }
 
     // Guardar envío
-    public void guardarEnvio() {
-        try (Connection con = ConDB.conectar()) {
+    public String guardarEnvio() {
+    System.out.println("DEBUG: guardarEnvio() - entrando...");
+    try {
+        int userId = getUsuarioLogueadoId();
+        System.out.println("DEBUG: userId = " + userId);
 
-            int userId = getUsuarioLogueadoId();
-            if (userId == 0) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario no logueado", null));
-                return;
-            }
-            envio.setUsuarios_id_usuario(userId);
-
-            String sql = "INSERT INTO envio (estado_envio, fecha_envio, fecha_entrega, direccion_envio, direccion_salida, observaciones, novedades, fk_mensajeria, usuarios_id_usuario) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ps.setString(1, envio.getEstado_envio());
-            ps.setDate(2, new java.sql.Date(envio.getFecha_envio().getTime()));
-            ps.setDate(3,
-                    envio.getFecha_entrega() != null ? new java.sql.Date(envio.getFecha_entrega().getTime()) : null);
-            ps.setString(4, envio.getDireccion_envio());
-            ps.setString(5, envio.getDireccion_salida());
-            ps.setString(6, envio.getObservaciones());
-            ps.setString(7, envio.getNovedades());
-            ps.setInt(8, envio.getFk_mensajeria());
-            ps.setInt(9, envio.getUsuarios_id_usuario());
-
-            ps.executeUpdate();
-
+        if (userId == 0) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío registrado correctamente", null));
-
-            listarEnvios();
-            // Redireccionar al listado
-            FacesContext.getCurrentInstance().getExternalContext().redirect("listarEnvios.xhtml");
-
-        } catch (SQLException | IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error registrando envío", e.getMessage()));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario no logueado", null));
+            return null;
         }
+        envio.setUsuarios_id_usuario(userId);
+
+        EnviosDAO dao = new EnviosDAO();
+        dao.agregarEnvio(envio); // Aquí puede estar el error
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.getExternalContext().getFlash().setKeepMessages(true);
+        fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío registrado correctamente", null));
+
+        envio = new Envio(); // limpiar
+        System.out.println("DEBUG: guardarEnvio() - insert ok");
+        return "/envios/listarEnvios?faces-redirect=true";
+
+    } catch (Exception e) {
+        e.printStackTrace(); // ✅ mostrará el error real en la consola GlassFish
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el envío", e.getMessage()));
+        return null;
     }
+}
+
+
+
 
     // Editar envío
-    public void editarEnvio(Envio e) {
-        try (Connection con = ConDB.conectar()) {
-            String sql = "SELECT * FROM envio WHERE idenvio=?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, e.getIdenvio());
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                envio = new Envio();
-                envio.setIdenvio(rs.getInt("idenvio"));
-                envio.setEstado_envio(rs.getString("estado_envio"));
-                envio.setFecha_envio(rs.getDate("fecha_envio"));
-                envio.setFecha_entrega(rs.getDate("fecha_entrega"));
-                envio.setDireccion_envio(rs.getString("direccion_envio"));
-                envio.setDireccion_salida(rs.getString("direccion_salida"));
-                envio.setObservaciones(rs.getString("observaciones"));
-                envio.setNovedades(rs.getString("novedades"));
-                envio.setFk_mensajeria(rs.getInt("fk_mensajeria"));
-            }
-
+    public void irEditarEnvio(Envio envioSeleccionado) {
+        try {
+            this.envio = envioSeleccionado; // carga los datos en el bean
+            listarMensajerias(); // recarga la lista para el select
             FacesContext.getCurrentInstance().getExternalContext().redirect("editarEnvio.xhtml");
-
-        } catch (SQLException | IOException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cargar envío", ex.getMessage()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     // Actualizar envío
-    public void actualizarEnvio() {
-        try (Connection con = ConDB.conectar()) {
-            String sql = "UPDATE envio SET estado_envio=?, fecha_envio=?, fecha_entrega=?, direccion_envio=?, direccion_salida=?, observaciones=?, novedades=?, fk_mensajeria=? WHERE idenvio=?";
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ps.setString(1, envio.getEstado_envio());
-            ps.setDate(2, envio.getFecha_envio() != null ? new java.sql.Date(envio.getFecha_envio().getTime()) : null);
-            ps.setDate(3, envio.getFecha_entrega() != null ? new java.sql.Date(envio.getFecha_entrega().getTime()) : null);
-            ps.setString(4, envio.getDireccion_envio());
-            ps.setString(5, envio.getDireccion_salida());
-            ps.setString(6, envio.getObservaciones() != null ? envio.getObservaciones() : null);
-            ps.setString(7, envio.getNovedades() != null ? envio.getNovedades() : null);
-            ps.setInt(8, envio.getFk_mensajeria());
-            ps.setInt(9, envio.getIdenvio());
-
-            ps.executeUpdate();
-
+    public String actualizarEnvio() {
+    try {
+        if (enviosDAO.editarEnvio(envio)) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío actualizado correctamente", null));
-
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío actualizado correctamente", null));
             listarEnvios();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("listarEnvios.xhtml");
-
-        } catch (SQLException | IOException e) {
+            return "listarEnvios?faces-redirect=true";
+        } else {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error actualizando envío", e.getMessage()));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo actualizar el envío", null));
+            return null;
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error actualizando el envío", e.getMessage()));
+        return null;
     }
+}
+
 
     // Eliminar envío
     public void eliminarEnvio(int id) {

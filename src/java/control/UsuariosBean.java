@@ -71,6 +71,7 @@ public class UsuariosBean implements Serializable {
 
             // Guardar el objeto completo en sesión
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", u.getId_usuario());
 
             // Redireccionar según tipo
             switch (rs.getString("tipo_usu")) {
@@ -115,16 +116,19 @@ public class UsuariosBean implements Serializable {
     public void listarUsuarios() {
         listaUsuarios = new ArrayList<>();
         try (Connection con = ConDB.conectar()) {
-            String sql = "SELECT id_usuario, tipo_usu, p_nombre, p_apellido, telefono, salario FROM usuarios";
+            // Incluimos num_identificacion y correo en la consulta
+            String sql = "SELECT id_usuario, num_identificacion, tipo_usu, p_nombre, p_apellido, correo, telefono, salario FROM usuarios";
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Usuarios u = new Usuarios();
                 u.setId_usuario(rs.getInt("id_usuario"));
+                u.setNum_identificacion(rs.getLong("num_identificacion")); // <-- nuevo
                 u.setTipo_usu(rs.getString("tipo_usu"));
                 u.setP_nombre(rs.getString("p_nombre"));
                 u.setP_apellido(rs.getString("p_apellido"));
+                u.setCorreo(rs.getString("correo")); // <-- nuevo
                 u.setTelefono(rs.getLong("telefono"));
                 u.setSalario(rs.getLong("salario"));
 
@@ -132,9 +136,10 @@ public class UsuariosBean implements Serializable {
             }
         } catch (SQLException e) {
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error listando usuarios", e.getMessage()));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error listando usuarios", e.getMessage()));
         }
     }
+
     
     public void volverAdmin() {
     try {
