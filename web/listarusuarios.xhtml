@@ -41,38 +41,51 @@
                                      ajax="false"/>
                 </div>
                 <p:dataTable value="#{usuariosBean.listaUsuarios}" var="u"
-             paginator="true" rows="5"
-            
-             styleClass="tabla-usuarios">
+                             paginator="true" rows="5"
+                             styleClass="tabla-usuarios">
 
-    <p:column headerText="ID">
-        <h:outputText value="#{u.id_usuario}"/>
-    </p:column>
-    <p:column headerText="Tipo Usuario">
-        <h:outputText value="#{u.tipo_usu}"/>
-    </p:column>
-    <p:column headerText="Nombre">
-        <h:outputText value="#{u.p_nombre}"/>
-    </p:column>
-    <p:column headerText="Apellido">
-        <h:outputText value="#{u.p_apellido}"/>
-    </p:column>
-    <p:column headerText="Teléfono">
-        <h:outputText value="#{u.telefono}"/>
-    </p:column>
-    <p:column headerText="Acciones">
-    <p:commandButton value="Editar"
-                     action="#{usuariosBean.editarUsuario(u)}"
-                     ajax="false"
-                     styleClass="btn-accion" />
+                    <p:column headerText="ID">
+                        <h:outputText value="#{u.id_usuario}"/>
+                    </p:column>
 
-    <p:commandButton value="Eliminar"
-                     action="#{usuariosBean.eliminarUsuario(u.id_usuario)}"
-                     ajax="false"
-                     styleClass="btn-accion"
-                     onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
-</p:column>
-</p:dataTable>
+                    <p:column headerText="Número Identificación">
+                        <h:outputText value="#{u.num_identificacion}"/>
+                    </p:column>
+
+                    <p:column headerText="Tipo Usuario">
+                        <h:outputText value="#{u.tipo_usu}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{u.p_nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Apellido">
+                        <h:outputText value="#{u.p_apellido}"/>
+                    </p:column>
+
+                    <p:column headerText="Correo">
+                        <h:outputText value="#{u.correo}"/>
+                    </p:column>
+
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{u.telefono}"/>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Editar"
+                                         action="#{usuariosBean.editarUsuario(u)}"
+                                         ajax="false"
+                                         styleClass="btn-accion" />
+
+                        <p:commandButton value="Eliminar"
+                                         action="#{usuariosBean.eliminarUsuario(u.id_usuario)}"
+                                         ajax="false"
+                                         styleClass="btn-accion"
+                                         onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
+                    </p:column>
+                </p:dataTable>
+
 
             </h:form>
         </main>

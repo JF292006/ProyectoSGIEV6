@@ -5,12 +5,12 @@ import java.util.Date;
 
 public class Usuarios {
     
-    private int id_usuario, num_identificacion;
-    private long telefono, salario;
+    private int id_usuario;
+    private long telefono, salario, num_identificacion;
     private String tipo_usu, clave, p_nombre, s_nombre, p_apellido, s_apellido, correo, direccion;
     private Date fecha_nacimiento;
 
-    public Usuarios(int id_usuario, int num_identificacion, long telefono, long salario, String tipo_usu, String clave, String p_nombre, String s_nombre, String p_apellido, String s_apellido, String correo, String direccion, Date fecha_nacimiento) {
+    public Usuarios(int id_usuario, long num_identificacion, long telefono, long salario, String tipo_usu, String clave, String p_nombre, String s_nombre, String p_apellido, String s_apellido, String correo, String direccion, Date fecha_nacimiento) {
         this.id_usuario = id_usuario;
         this.num_identificacion = num_identificacion;
         this.telefono = telefono;
@@ -40,11 +40,11 @@ public class Usuarios {
         this.id_usuario = id_usuario;
     }
 
-    public int getNum_identificacion() {
+    public long getNum_identificacion() {
         return num_identificacion;
     }
 
-    public void setNum_identificacion(int num_identificacion) {
+    public void setNum_identificacion(long num_identificacion) {
         this.num_identificacion = num_identificacion;
     }
 
