@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Nueva Venta</title>
+    <h:outputStylesheet library="css" name="estilosadmin.css"/>
+</h:head>
+
+<h:body>
+    <header>
+        <div class="logo-container">
+            <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+            <h1>Panel de Administración</h1>
+        </div>
+        <div class="user-info">
+            <h:form>
+                <p:commandButton value="Volver"
+                                 styleClass="logout-btn"
+                                 action="/ventas/listarVentas.xhtml?faces-redirect=true"
+                                 ajax="false"/>
+            </h:form>
+        </div>
+    </header>
+
+    <main class="admin-dashboard">
+        <h2 style="text-align:center; margin-bottom:20px;">Registrar Nueva Venta</h2>
+
+        <h:form id="formNuevaVenta">
+            <h:panelGrid columns="2" style="margin: 0 auto; text-align:center;" cellpadding="8">
+
+                <!-- Seleccionar cliente -->
+                <h:outputLabel value="Cliente:" for="cliente"/>
+                <p:selectOneMenu id="cliente" value="#{ventaBean.usuarioSeleccionado}" style="width:250px" required="true">
+    <f:selectItem itemLabel="-- Seleccione --" itemValue="0" />
+    <f:selectItems value="#{usuariosBean.listaUsuarios}" var="u"
+                   itemLabel="#{u.p_nombre} #{u.p_apellido}" itemValue="#{u.id_usuario}" />
+</p:selectOneMenu>
+
+
+                <!-- Observaciones -->
+                <h:outputLabel value="Observaciones:" for="obs"/>
+                <p:inputTextarea id="obs" value="#{ventaBean.ventaActual.observaciones}" rows="3" cols="30"/>
+
+            </h:panelGrid>
+
+            <br/>
+
+            <!-- Listado de productos disponibles -->
+            <h3 style="text-align:center;">Agregar Productos</h3>
+            <p:dataTable value="#{productoBean.lstProds}" var="p" paginator="true" rows="5"
+                         style="margin-top:15px; width:90%; margin-left:auto; margin-right:auto;">
+
+                <p:column headerText="ID" style="text-align:center;">
+                    <h:outputText value="#{p.idproducto}"/>
+                </p:column>
+                <p:column headerText="Nombre" style="text-align:center;">
+                    <h:outputText value="#{p.nombre_producto}"/>
+                </p:column>
+                <p:column headerText="Precio" style="text-align:center;">
+                    <h:outputText value="#{p.precio_producto}"/>
+                </p:column>
+                <p:column headerText="Acciones" style="text-align:center;">
+                    <p:commandButton value="Agregar"
+                                     actionListener="#{ventaBean.agregarProducto(p)}"
+                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:subtotal :formNuevaVenta:total"/>
+                </p:column>
+            </p:dataTable>
+
+            <br/>
+
+            <!-- Carrito de venta -->
+            <h3 style="text-align:center;">Carrito de Venta</h3>
+            <p:dataTable id="carritoVentas" value="#{ventaBean.carrito}" var="c"
+                         style="margin-top:15px; width:90%; margin-left:auto; margin-right:auto;" editable="true">
+
+                <p:column headerText="Producto" style="text-align:center;">
+                    <h:outputText value="#{c.producto.nombre_producto}"/>
+                </p:column>
+
+                <p:column headerText="Cantidad" style="text-align:center;">
+                   
+                </p:column>
+
+                <p:column headerText="Valor Unitario" style="text-align:center;">
+                    <h:outputText value="#{c.valor_unitario}"/>
+                </p:column>
+
+                <p:column headerText="Subtotal" style="text-align:center;">
+                    <h:outputText value="#{c.cantidad * c.valor_unitario}"/>
+                </p:column>
+
+                <p:column headerText="Acciones" style="text-align:center;">
+                    <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                     actionListener="#{ventaBean.eliminarDelCarrito(c)}"
+                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:subtotal :formNuevaVenta:total"/>
+                </p:column>
+            </p:dataTable>
+
+            <br/>
+
+            <!-- Totales -->
+            <h:panelGrid columns="2" style="margin: 0 auto; text-align:center;" cellpadding="6">
+                <h:outputLabel value="Subtotal:"/>
+                <h:outputText id="subtotal" value="#{ventaBean.subtotal}"/>
+
+                <h:outputLabel value="Total:"/>
+                <h:outputText id="total" value="#{ventaBean.total}"/>
+            </h:panelGrid>
+
+            <br/>
+
+            <!-- Botón Guardar -->
+            <div style="text-align:center; margin-top:20px;">
+                <p:commandButton value="Guardar Venta" actionListener="#{ventaBean.guardarVenta}"
+                                 ajax="false" styleClass="logout-btn"/>
+            </div>
+        </h:form>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Panel Administrativo</h3>
+            </div>
+            <div class="system-info">
+                <p>© 2025 Tienda Naturista - Sistema de Administración</p>
+            </div>
+        </div>
+    </footer>
+</h:body>
+</html>
