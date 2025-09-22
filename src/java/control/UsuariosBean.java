@@ -42,36 +42,56 @@ public class UsuariosBean implements Serializable {
         return listaUsuarios;
     }
     
-    public void autenticar(){
-        try {
-            Connection con = ConDB.conectar();
-            
-            String sql = "SELECT * FROM usuarios WHERE correo = ? AND clave = ?";            
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, usuarios.getCorreo());  
-            String pw = Utilidades.encriptar(usuarios.getClave());
-            ps.setString(2, pw);
-                        
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("p_nombre"));
-                
-                switch(rs.getString("tipo_usu")){
-                    case "operario":
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("operario.xhtml");
-                        break;
-                    case "administrador":
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
-                        break; 
-                }
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Correo y/o Contraseña no válidos", "Aviso"));
-            }            
-        } catch (SQLException | IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error accediendo a la Base de Datos", "Error"));
+    public void autenticar() {
+    try (Connection con = ConDB.conectar()) {
+
+        String sql = "SELECT * FROM usuarios WHERE correo = ? AND clave = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, usuarios.getCorreo());
+        String pw = Utilidades.encriptar(usuarios.getClave());
+        ps.setString(2, pw);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            // Crear objeto Usuarios con todos los datos que necesites
+            Usuarios u = new Usuarios();
+            u.setId_usuario(rs.getInt("id_usuario"));
+            u.setTipo_usu(rs.getString("tipo_usu"));
+            u.setP_nombre(rs.getString("p_nombre"));
+            u.setS_nombre(rs.getString("s_nombre"));
+            u.setP_apellido(rs.getString("p_apellido"));
+            u.setS_apellido(rs.getString("s_apellido"));
+            u.setCorreo(rs.getString("correo"));
+            u.setTelefono(rs.getLong("telefono"));
+            u.setSalario(rs.getLong("salario"));
+            u.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
+            u.setDireccion(rs.getString("direccion"));
+            // NOTA: NO guardes la clave en sesión por seguridad
+
+            // Guardar el objeto completo en sesión
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+
+            // Redireccionar según tipo
+            switch (rs.getString("tipo_usu")) {
+                case "operario":
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("operario.xhtml");
+                    break;
+                case "administrador":
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+                    break;
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "Correo y/o Contraseña no válidos", "Aviso"));
         }
+
+    } catch (SQLException | IOException e) {
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_WARN, "Error accediendo a la Base de Datos", "Error"));
     }
+}
+
     
     public void verifSesion(){
         String nom = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
@@ -84,14 +104,14 @@ public class UsuariosBean implements Serializable {
         }
     }
     
-    public void cerrarSesion(){
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
-         try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-            } catch (IOException ex) {                
-            }
-    }
-    
+    public String cerrarSesion() {
+    // Invalida toda la sesión
+    FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    // Retorna la página de login/index con redirect
+    return "/index.xhtml?faces-redirect=true";
+}
+
+
     public void listarUsuarios() {
         listaUsuarios = new ArrayList<>();
         try (Connection con = ConDB.conectar()) {
