@@ -4,81 +4,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Tienda Naturista - Romar Natural</title>
-        <link href="primeicons/primeicons.css" rel="stylesheet" type="text/css"/>
-        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
-    </h:head>
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tienda Naturista - Romar Natural</title>
+    <h:outputStylesheet library="css" name="estilosadmin.css"/>
+    <link href="primeicons/primeicons.css" rel="stylesheet" type="text/css"/>
+</h:head>
 
-    <h:body styleClass="mi-plantilla">
-        <h:form>
-            <p:layout fullPage="true">
+<h:body>
+    <header>
+        <div class="logo-container">
+            <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+            <h1>Tienda Naturista - Romar Natural</h1>
+        </div>
 
-                
-                <p:layoutUnit position="north" size="120" resizable="false" closable="false">
-                    <h:panelGroup layout="block" 
-                                  style="display:flex; justify-content:space-between; align-items:center;">
-                        
-                        <h:graphicImage name="logo.png" styleClass="logo" alt="Logo Tienda Naturista"/>
+        <nav class="user-info">
+            <h:form>
+                <p:commandButton value="Catálogo"
+                                 styleClass="logout-btn"
+                                 action="vistas/catalogo.xhtml?faces-redirect=true"
+                                 ajax="false"/>
+                <p:commandButton value="Iniciar Sesión"
+                                 styleClass="logout-btn"
+                                 action="iniciosesion.xhtml?faces-redirect=true"
+                                 ajax="false"/>
+            </h:form>
+        </nav>
+    </header>
 
-                       
-                        <p:menubar>
-                            <p:submenu label="Menú">
-                                <p:menuitem value="Catálogo" url="vistas/catalogo.xhtml" icon="pi pi-list"/>
-                            </p:submenu>
-                            <p:menuitem value="Iniciar Sesión" outcome="iniciosesion.xhtml" icon="pi pi-sign-in"/>
-                        </p:menubar>
-                    </h:panelGroup>
-                </p:layoutUnit>
+    <main class="admin-dashboard" style="background:url('images/fondo.jpg') center/cover no-repeat; min-height:70vh; display:flex; justify-content:center; align-items:center;">
+        <p:panel styleClass="hero-overlay"
+                 style="max-width:600px; text-align:center; background:rgba(255,255,255,0.9); padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);"
+                 header="¡Descubre Nuestras Ofertas Especiales!">
+            <h:outputText value="Este mes, aprovecha nuestro pack de bienestar: té verde orgánico, suplementos de hierbas y aceites esenciales con un 25% de descuento."/>
+            <br/><br/>
+            <p:button value="Ver Más" styleClass="btn-ver-mas" icon="pi pi-shopping-cart"/>
+        </p:panel>
+    </main>
 
-                
-                <p:layoutUnit position="center">
-                    <h:panelGroup layout="block" styleClass="fondo-img">
-                        <p:panel styleClass="hero-overlay" header="¡Descubre Nuestras Ofertas Especiales!">
-                            <h:outputText value="Este mes, aprovecha nuestro pack de bienestar: té verde orgánico, suplementos de hierbas y aceites esenciales con un 25% de descuento."/>
-                            <br/><br/>
-                            <p:button value="Ver Más" styleClass="btn-ver-mas"/>
-                        </p:panel>
-                    </h:panelGroup>
-                </p:layoutUnit>
-
-                
-                <p:layoutUnit position="south" size="150" resizable="false" closable="false">
-                    <h:panelGrid columns="2" style="width:100%;">
-
-                        
-                        <h:panelGroup>
-                            <h3>Contacto</h3>
-                            <h:outputText value="Teléfono: +57 3158700314"/><br/>
-                            <h:outputText value="Dirección: Calle 144 #145 - 50"/>
-                        </h:panelGroup>
-
-                        
-                        <h:panelGroup>
-                            <h3>Síguenos</h3>
-                            <p:commandLink value="Facebook" action="#">
-                                <i class="pi pi-facebook" style="margin-right:5px;"></i>
-                                Facebook
-                            </p:commandLink>
-                            <p:spacer width="10"/>
-                            <p:commandLink value="Instagram" action="#">
-                                <i class="pi pi-instagram" style="margin-right:5px;"></i>
-                                Instagram
-                            </p:commandLink>
-                            <p:spacer width="10"/>
-                            <p:commandLink value="WhatsApp" action="#">
-                                <i class="pi pi-whatsapp" style="margin-right:5px;"></i>
-                                WhatsApp
-                            </p:commandLink>
-
-                        </h:panelGroup>
-
-                    </h:panelGrid>
-                </p:layoutUnit>
-            </p:layout>
-        </h:form>
-    </h:body>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Contacto</h3>
+                <p>Teléfono: +57 3158700314</p>
+                <p>Dirección: Calle 144 #145 - 50</p>
+            </div>
+            <div class="social-info">
+                <h3>Síguenos</h3>
+                <p:commandLink onclick="window.open('https://facebook.com','_blank')" title="Facebook">
+                    <i class="pi pi-facebook"></i>
+                </p:commandLink>
+                <p:commandLink onclick="window.open('https://instagram.com','_blank')" title="Instagram">
+                    <i class="pi pi-instagram"></i>
+                </p:commandLink>
+                <p:commandLink onclick="window.open('https://wa.me/573158700314','_blank')" title="WhatsApp">
+                    <i class="pi pi-whatsapp"></i>
+                </p:commandLink>
+            </div>
+        </div>
+    </footer>
+</h:body>
 </html>
