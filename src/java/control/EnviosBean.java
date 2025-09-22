@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import dao.EnviosDAO;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -127,46 +127,40 @@ public class EnviosBean implements Serializable {
     }
 
     // Guardar envío
-    public void guardarEnvio() {
-        try (Connection con = ConDB.conectar()) {
+    public String guardarEnvio() {
+    System.out.println("DEBUG: guardarEnvio() - entrando...");
+    try {
+        int userId = getUsuarioLogueadoId();
+        System.out.println("DEBUG: userId = " + userId);
 
-            int userId = getUsuarioLogueadoId();
-            if (userId == 0) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario no logueado", null));
-                return;
-            }
-            envio.setUsuarios_id_usuario(userId);
-
-            String sql = "INSERT INTO envio (estado_envio, fecha_envio, fecha_entrega, direccion_envio, direccion_salida, observaciones, novedades, fk_mensajeria, usuarios_id_usuario) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ps.setString(1, envio.getEstado_envio());
-            ps.setDate(2, new java.sql.Date(envio.getFecha_envio().getTime()));
-            ps.setDate(3,
-                    envio.getFecha_entrega() != null ? new java.sql.Date(envio.getFecha_entrega().getTime()) : null);
-            ps.setString(4, envio.getDireccion_envio());
-            ps.setString(5, envio.getDireccion_salida());
-            ps.setString(6, envio.getObservaciones());
-            ps.setString(7, envio.getNovedades());
-            ps.setInt(8, envio.getFk_mensajeria());
-            ps.setInt(9, envio.getUsuarios_id_usuario());
-
-            ps.executeUpdate();
-
+        if (userId == 0) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío registrado correctamente", null));
-
-            listarEnvios();
-            // Redireccionar al listado
-            FacesContext.getCurrentInstance().getExternalContext().redirect("listarEnvios.xhtml");
-
-        } catch (SQLException | IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error registrando envío", e.getMessage()));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario no logueado", null));
+            return null;
         }
+        envio.setUsuarios_id_usuario(userId);
+
+        EnviosDAO dao = new EnviosDAO();
+        dao.agregarEnvio(envio); // Aquí puede estar el error
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.getExternalContext().getFlash().setKeepMessages(true);
+        fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Envío registrado correctamente", null));
+
+        envio = new Envio(); // limpiar
+        System.out.println("DEBUG: guardarEnvio() - insert ok");
+        return "/envios/listarEnvios?faces-redirect=true";
+
+    } catch (Exception e) {
+        e.printStackTrace(); // ✅ mostrará el error real en la consola GlassFish
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el envío", e.getMessage()));
+        return null;
     }
+}
+
+
+
 
     // Editar envío
     public void editarEnvio(Envio e) {

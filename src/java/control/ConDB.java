@@ -26,7 +26,8 @@ public class ConDB {
             conn = DriverManager.getConnection(url);           
             
         } catch (SQLException e) {
-            System.out.println("Error en Conexión");
+            e.printStackTrace(); // imprime el error real
+            System.out.println("Error en Conexión: " + e.getMessage());
         }
         
         return conn;

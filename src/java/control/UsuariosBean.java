@@ -71,6 +71,7 @@ public class UsuariosBean implements Serializable {
 
             // Guardar el objeto completo en sesión
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", u.getId_usuario());
 
             // Redireccionar según tipo
             switch (rs.getString("tipo_usu")) {
