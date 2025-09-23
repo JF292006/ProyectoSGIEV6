@@ -13,6 +13,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile;
 import modelo.Mensajeria;
 
 @ManagedBean
@@ -312,6 +316,74 @@ public class MensajeriaBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error listando mensajerías", e.getMessage()));
         }
     }
+    
+    public void cargaMasivaDebug(FileUploadEvent event) {
+        UploadedFile file = event.getFile();
+
+        try (Workbook workbook = new HSSFWorkbook(file.getInputStream()); Connection con = ConDB.conectar()) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            String sql = "INSERT INTO mensajeria (nombre_mensajeria, tel_mensajeria, direccion_mensajeria, cobertura) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            DataFormatter formatter = new DataFormatter();
+
+            int filasInsertadas = 0;
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    System.out.println("Fila " + (row.getRowNum() + 1) + ": Header ignorado");
+                    continue; // saltar header
+                }
+
+                try {
+                    String nombre = formatter.formatCellValue(row.getCell(0)).trim();
+                    String telStr = formatter.formatCellValue(row.getCell(1)).trim();
+                    String direccion = formatter.formatCellValue(row.getCell(2)).trim();
+                    String cobertura = formatter.formatCellValue(row.getCell(3)).trim();
+
+                    System.out.println("Fila " + (row.getRowNum() + 1) + " -> "
+                            + "Nombre: '" + nombre + "', "
+                            + "Tel: '" + telStr + "', "
+                            + "Dirección: '" + direccion + "', "
+                            + "Cobertura: '" + cobertura + "'");
+
+                    if (nombre.isEmpty() && telStr.isEmpty() && direccion.isEmpty() && cobertura.isEmpty()) {
+                        System.out.println("Fila " + (row.getRowNum() + 1) + " vacía, se ignora.");
+                        continue;
+                    }
+
+                    long telefono;
+                    try {
+                        telefono = Long.parseLong(telStr.replaceAll("\\D", ""));
+                    } catch (NumberFormatException ex) {
+                        throw new Exception("Teléfono inválido: " + telStr);
+                    }
+
+                    ps.setString(1, nombre);
+                    ps.setLong(2, telefono);
+                    ps.setString(3, direccion);
+                    ps.setString(4, cobertura);
+
+                    ps.executeUpdate(); // insertar fila por fila
+                    filasInsertadas++;
+                    System.out.println("Fila " + (row.getRowNum() + 1) + " insertada correctamente.");
+
+                } catch (Exception filaEx) {
+                    System.err.println("Error en fila " + (row.getRowNum() + 1) + ": " + filaEx.getMessage());
+                    filaEx.printStackTrace();
+                }
+            }
+
+            System.out.println("Carga masiva finalizada. Filas insertadas: " + filasInsertadas);
+
+        } catch (Exception e) {
+            System.err.println("Error general en la carga masiva:");
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
     
     
     
