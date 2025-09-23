@@ -21,7 +21,7 @@
 
             <div class="user-info">
                 <h:form>
-                    <p:button value="Volver" outcome="/mensajeria/mensajesyenvios.xhtml" styleClass="logout-btn"/>
+                    <p:button value="Volver" outcome="/operario" styleClass="logout-btn"/>
                 </h:form>
             </div>
         </header>
@@ -33,16 +33,15 @@
                 <div style="margin-bottom:15px; text-align:right;">
                     <p:commandButton value="Agregar Envío"
                                      styleClass="logout-btn"
-                                     action="#{enviosBean.irAgregarEnvio()}"
+                                     action="#{enviosBean.irAgregarEnviooperario()}"
                                      ajax="false"/>
-                    <p:commandButton value="Reporte PDF" ajax="false" styleClass="logout-btn" style="margin-left:20px" actionListener="#{enviosBean.exportarPDF()}"/>
                 </div>
 
                 <p:dataTable value="#{enviosBean.listaEnvios}" var="e"
                              paginator="true" rows="5"
                              styleClass="tabla-usuarios">
 
-                    <p:column headerText="ID" filterBy="#{e.idenvio}" filterMatchMode="contains">
+                    <p:column headerText="ID">
                         <h:outputText value="#{e.idenvio}"/>
                     </p:column>
                     <p:column headerText="Estado">
@@ -58,7 +57,7 @@
                             <f:convertDateTime pattern="yyyy-MM-dd"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Dirección Envío" filterBy="#{e.direccion_envio}" filterMatchMode="contains">
+                    <p:column headerText="Dirección Envío">
                         <h:outputText value="#{e.direccion_envio}"/>
                     </p:column>
                     <p:column headerText="Dirección Salida">
@@ -72,11 +71,11 @@
                     </p:column>
                     <p:column headerText="Acciones">
                         <p:commandButton value="Editar"
-                                         action="#{enviosBean.irEditarEnvio(e)}"
+                                         action="#{enviosBean.irEditarEnviooperario(e)}"
                                          ajax="false"
                                          styleClass="btn-accion"/>
                         <p:commandButton value="Eliminar"
-                                         action="#{enviosBean.eliminarEnvio(e.idenvio)}"
+                                         action="#{enviosBean.eliminarEnviooperario(e.idenvio)}"
                                          ajax="false"
                                          styleClass="btn-accion"
                                          onclick="return confirm('¿Seguro que deseas eliminar este envío?');"/>

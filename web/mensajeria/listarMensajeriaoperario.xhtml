@@ -20,7 +20,7 @@
 
             <div class="user-info">
                 <h:form>
-                    <p:button value="Volver" outcome="/mensajeria/mensajesyenvios.xhtml" styleClass="logout-btn"/>
+                    <p:button value="Volver" outcome="/operario" styleClass="logout-btn"/>
                 </h:form>
             </div>
         </header>
@@ -28,30 +28,20 @@
         <main class="admin-dashboard">
             <h2 style="text-align:center; margin-bottom:20px;">Gestión de Mensajerías</h2>
 
-            <h:form enctype="multipart/form-data">
-                <div style="margin-bottom:15px; display:flex; justify-content: space-between;">
-                    
-                    <p:fileUpload 
-                        listener="#{mensajeriaBean.cargaMasivaDebug}" 
-                        mode="advanced" 
-                        auto="true" 
-                        allowTypes="/(\.|\/)(xls)$/" 
-                        label="Carga Masiva Excel (.xls)"
-                        styleClass="logout-btn upload-btn"/>
-
-                    <!-- Botón derecha: Agregar mensajería -->
+            <h:form>
+                <div style="margin-bottom:15px; text-align:right;">
                     <p:commandButton value="Agregar Mensajería"
                                      styleClass="logout-btn"
-                                     action="#{mensajeriaBean.irAgregarMensajeria()}"
+                                     action="#{mensajeriaBean.irAgregarMensajeriaoperario()}"
                                      ajax="false"/>
-                    <p:commandButton value="Reporte PDF" ajax="false" styleClass="logout-btn" style="margin-left:20px" actionListener="#{mensajeriaBean.exportarPDF()}"/>
                 </div>
 
                 <p:dataTable value="#{mensajeriaBean.listaMensajeria}" var="m"
                              paginator="true" rows="5"
+                             
                              styleClass="tabla-usuarios">
 
-                    <p:column headerText="ID" filterBy="#{m.idmensajeria}" filterMatchMode="contains">
+                    <p:column headerText="ID">
                         <h:outputText value="#{m.idmensajeria}"/>
                     </p:column>
                     <p:column headerText="Nombre">
@@ -63,18 +53,18 @@
                     <p:column headerText="Dirección">
                         <h:outputText value="#{m.direccion_mensajeria}"/>
                     </p:column>
-                    <p:column headerText="Cobertura" filterBy="#{m.cobertura}" filterMatchMode="contains">
+                    <p:column headerText="Cobertura">
                         <h:outputText value="#{m.cobertura}"/>
                     </p:column>
 
                     <p:column headerText="Acciones">
                         <p:commandButton value="Editar"
-                                         action="#{mensajeriaBean.editarMensajeria(m)}"
+                                         action="#{mensajeriaBean.editarMensajeriaoperario(m)}"
                                          ajax="false"
                                          styleClass="btn-accion"/>
 
                         <p:commandButton value="Eliminar"
-                                         action="#{mensajeriaBean.eliminarMensajeria(m.idmensajeria)}"
+                                         action="#{mensajeriaBean.eliminarMensajeriaoperario(m.idmensajeria)}"
                                          ajax="false"
                                          styleClass="btn-accion"
                                          onclick="return confirm('¿Seguro que deseas eliminar esta mensajería?');"/>

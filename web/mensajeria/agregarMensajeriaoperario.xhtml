@@ -23,7 +23,7 @@
                 <h:form>
                     <p:commandButton value="Volver"
                                      styleClass="logout-btn"
-                                     action="#{mensajeriaBean.volverListado}"
+                                     action="#{mensajeriaBean.volverListadooperario}"
                                      ajax="false"/>
                 </h:form>
             </div>
@@ -45,17 +45,13 @@
                     <p:inputText id="direccion" value="#{mensajeriaBean.mensajeria.direccion_mensajeria}" required="true" size="40"/>
 
                     <h:outputLabel value="Cobertura:" for="cobertura"/>
-                    <p:selectOneMenu id="cobertura" value="#{mensajeriaBean.mensajeria.cobertura}" required="true">
-                        <f:selectItem itemLabel="Seleccione un tipo" itemValue="" noSelectionOption="true"/>
-                        <f:selectItem itemLabel="Bogotá" itemValue="Bogotá"/>
-                        <f:selectItem itemLabel="Bogotá y nacional" itemValue="Bogota y Nacional"/>
-                    </p:selectOneMenu>
+                    <p:inputText id="cobertura" value="#{mensajeriaBean.mensajeria.cobertura}" required="true"/>
                 </p:panelGrid>
 
                 <div style="text-align:center; margin-top:20px;">
                     <p:commandButton value="Guardar"
                                      styleClass="logout-btn"
-                                     action="#{mensajeriaBean.guardarMensajeria}"
+                                     action="#{mensajeriaBean.guardarMensajeriaoperario}"
                                      ajax="false"/>
                 </div>
             </h:form>

@@ -31,12 +31,7 @@
 
     <div class="form-group">
         <h:outputLabel value="Estado:" for="estado"/>
-        <p:selectOneMenu id="estado" value="#{enviosBean.envio.estado_envio}" required="true">
-            <f:selectItem itemLabel="Seleccione un tipo" itemValue="" noSelectionOption="true"/>
-            <f:selectItem itemLabel="Entregado" itemValue="Entregado"/>
-            <f:selectItem itemLabel="En reparto" itemValue="En reparto"/>
-            <f:selectItem itemLabel="Sin Entregar" itemValue="Sin entregar"/>
-        </p:selectOneMenu>
+        <p:inputText id="estado" value="#{enviosBean.envio.estado_envio}" required="true" />
     </div>
 
     <div class="form-group">
@@ -80,11 +75,11 @@
 
     <div class="form-group" style="text-align:right; margin-top:20px;">
         <p:commandButton value="Guardar" 
-                         action="#{enviosBean.guardarEnvio}" 
+                         action="#{enviosBean.guardarEnviooperario}" 
                          styleClass="btn btn-success me-2 px-4"
                          ajax="false"/>
         <p:button value="Volver" 
-                  outcome="/envios/listarEnvios.xhtml" 
+                  outcome="/envios/listarEnviosoperario.xhtml" 
                   styleClass="btn btn-secondary me-2 px-4"/>
     </div>
 </h:form>
