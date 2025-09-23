@@ -4,10 +4,28 @@ package modelo;
 import java.util.Date;
 
 public class Envio {
-    private String estado_envio, direccion_envio, direccion_salida, observaciones, novedades;
+    private String estado_envio, direccion_envio, direccion_salida, observaciones, novedades, nom_mens, nom_usr;
     private int idenvio, fk_mensajeria, usuarios_id_usuario;
     private Date fecha_envio, fecha_entrega;
 
+    public String getNom_mens() {
+        return nom_mens;
+    }
+
+    public void setNom_mens(String nom_mens) {
+        this.nom_mens = nom_mens;
+    }
+
+    public String getNom_usr() {
+        return nom_usr;
+    }
+
+    public void setNom_usr(String nom_usr) {
+        this.nom_usr = nom_usr;
+    }
+    
+    
+    
     public String getEstado_envio() {
         return estado_envio;
     }

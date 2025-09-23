@@ -34,6 +34,7 @@
                                      styleClass="logout-btn"
                                      action="#{mensajeriaBean.irAgregarMensajeria()}"
                                      ajax="false"/>
+                    <p:commandButton value="Reporte PDF" ajax="false" styleClass="logout-btn" style="margin-left:20px" actionListener="#{mensajeriaBean.exportarPDF()}"/>
                 </div>
 
                 <p:dataTable value="#{mensajeriaBean.listaMensajeria}" var="m"

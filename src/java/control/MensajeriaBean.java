@@ -1,5 +1,6 @@
 package control;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -13,7 +14,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import modelo.Mensajeria;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @ManagedBean
 @SessionScoped
@@ -42,7 +49,35 @@ public class MensajeriaBean implements Serializable {
     }
 
     // ========= MÉTODOS CRUD =========
+    
+    public void exportarPDF() {
+        try {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reporteMens.jasper");
+            File jasper = new File(path);
+            MensajeriaDataSource pds = new MensajeriaDataSource();
 
+            JasperPrint jprint = JasperFillManager.fillReport(jasper.getPath(), null, pds);
+
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jprint);
+
+            HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+            resp.setContentType("application/pdf");
+            resp.addHeader("Content-Disposition", "attachment; filename=\"Mensajerias.pdf\"");
+
+            try (ServletOutputStream stream = resp.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jprint, stream);
+
+                stream.flush();
+                stream.close();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+
+        } catch (JRException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error creando reporte"));
+        }
+    }
+    
     public void listarMensajeria() {
         listaMensajeria = new ArrayList<>();
         try (Connection con = ConDB.conectar()) {

@@ -35,6 +35,7 @@
                                      styleClass="logout-btn"
                                      action="#{enviosBean.irAgregarEnvio()}"
                                      ajax="false"/>
+                    <p:commandButton value="Reporte PDF" ajax="false" styleClass="logout-btn" style="margin-left:20px" actionListener="#{enviosBean.exportarPDF()}"/>
                 </div>
 
                 <p:dataTable value="#{enviosBean.listaEnvios}" var="e"

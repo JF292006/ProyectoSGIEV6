@@ -9,14 +9,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import dao.EnviosDAO;
+import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import modelo.Envio;
 import modelo.Mensajeria;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @ManagedBean
 @SessionScoped
@@ -58,6 +65,35 @@ public class EnviosBean implements Serializable {
     // ===== Métodos =====
 
     // Listar envíos
+    
+    public void exportarPDF() {
+        try {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reporteEnv.jasper");
+            File jasper = new File(path);
+            EnvioDataSource pds = new EnvioDataSource();
+
+            JasperPrint jprint = JasperFillManager.fillReport(jasper.getPath(), null, pds);
+
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jprint);
+
+            HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+            resp.setContentType("application/pdf");
+            resp.addHeader("Content-Disposition", "attachment; filename=\"Envios.pdf\"");
+
+            try (ServletOutputStream stream = resp.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jprint, stream);
+
+                stream.flush();
+                stream.close();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+
+        } catch (JRException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error creando reporte"));
+        }
+    }
+    
     public void listarEnvios() {
         listaEnvios = new ArrayList<>();
         try (Connection con = ConDB.conectar()) {
