@@ -238,3 +238,11 @@ footer {
     }
 }
 
+.stock-bajo {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.stock-normal {
+    color: #008000;
+}

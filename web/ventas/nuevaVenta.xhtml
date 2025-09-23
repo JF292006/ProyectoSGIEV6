@@ -6,11 +6,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Nueva Venta</title>
     <h:outputStylesheet library="css" name="estilosadmin.css"/>
 </h:head>
 
 <h:body>
+    <!-- HEADER -->
     <header>
         <div class="logo-container">
             <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
@@ -26,101 +29,130 @@
         </div>
     </header>
 
+    <!-- MAIN -->
     <main class="admin-dashboard">
         <h2 style="text-align:center; margin-bottom:20px;">Registrar Nueva Venta</h2>
 
         <h:form id="formNuevaVenta">
-            <h:panelGrid columns="2" style="margin: 0 auto; text-align:center;" cellpadding="8">
+            <p:messages id="messages" closable="true" showDetail="true" />
 
-                <!-- Seleccionar cliente -->
-                <h:outputLabel value="Cliente:" for="cliente"/>
-                <p:selectOneMenu id="cliente" value="#{ventaBean.usuarioSeleccionado}" style="width:250px" required="true">
-    <f:selectItem itemLabel="-- Seleccione --" itemValue="0" />
-    <f:selectItems value="#{usuariosBean.listaUsuarios}" var="u"
-                   itemLabel="#{u.p_nombre} #{u.p_apellido}" itemValue="#{u.id_usuario}" />
-</p:selectOneMenu>
+            <!-- Cliente y Observaciones -->
+            <h:panelGrid columns="2" cellpadding="5" styleClass="form-grid">
+                <h:outputLabel for="cliente" value="Usuario:"/>
+                <p:selectOneMenu id="cliente" value="#{ventaBean.usuarioSeleccionado}" required="true">
+                    <f:selectItem itemLabel="-- Seleccione un Usuario --" itemValue="0"/>
+                    <f:selectItems value="#{usuariosBean.listaUsuarios}" var="u"
+                                   itemLabel="#{u.p_nombre} #{u.p_apellido}"
+                                   itemValue="#{u.id_usuario}" />
+                </p:selectOneMenu>
 
-
-                <!-- Observaciones -->
-                <h:outputLabel value="Observaciones:" for="obs"/>
-                <p:inputTextarea id="obs" value="#{ventaBean.ventaActual.observaciones}" rows="3" cols="30"/>
-
+                <h:outputLabel for="obs" value="Observaciones:"/>
+                <p:inputTextarea id="obs" value="#{ventaBean.ventaActual.observaciones}" rows="3" cols="40"/>
             </h:panelGrid>
 
-            <br/>
-
-            <!-- Listado de productos disponibles -->
-            <h3 style="text-align:center;">Agregar Productos</h3>
-            <p:dataTable value="#{productoBean.lstProds}" var="p" paginator="true" rows="5"
-                         style="margin-top:15px; width:90%; margin-left:auto; margin-right:auto;">
-
-                <p:column headerText="ID" style="text-align:center;">
-                    <h:outputText value="#{p.idproducto}"/>
+            <!-- Productos Disponibles -->
+            <h3>Productos Disponibles</h3>
+            <p:dataTable id="tablaProductos" value="#{productoBean.lstProds}" var="p"
+                         paginator="true" rows="5" styleClass="tabla-usuarios" style="width:90%;">
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{p.nombre_producto}" />
                 </p:column>
-                <p:column headerText="Nombre" style="text-align:center;">
-                    <h:outputText value="#{p.nombre_producto}"/>
+                <p:column headerText="Precio">
+                    <h:outputText value="#{p.precio_producto}">
+                        <f:convertNumber type="currency" currencySymbol="$" />
+                    </h:outputText>
                 </p:column>
-                <p:column headerText="Precio" style="text-align:center;">
-                    <h:outputText value="#{p.precio_producto}"/>
+                <p:column headerText="Stock">
+                    <h:outputText value="#{p.stock}" />
                 </p:column>
-                <p:column headerText="Acciones" style="text-align:center;">
-                    <p:commandButton value="Agregar"
+                <p:column headerText="Cantidad">
+                    <p:inputText value="#{ventaBean.cantidadesPorProducto[p.idproducto]}" size="3" maxlength="3">
+                        <f:convertNumber integerOnly="true"/>
+                    </p:inputText>
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Agregar" icon="pi pi-cart-plus"
                                      actionListener="#{ventaBean.agregarProducto(p)}"
-                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:subtotal :formNuevaVenta:total"/>
+                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:totales :formNuevaVenta:messages"
+                                     styleClass="ui-button-success"/>
                 </p:column>
             </p:dataTable>
 
-            <br/>
-
-            <!-- Carrito de venta -->
-            <h3 style="text-align:center;">Carrito de Venta</h3>
+            <!-- Carrito -->
+            <h3>Carrito de Venta</h3>
             <p:dataTable id="carritoVentas" value="#{ventaBean.carrito}" var="c"
-                         style="margin-top:15px; width:90%; margin-left:auto; margin-right:auto;" editable="true">
-
-                <p:column headerText="Producto" style="text-align:center;">
-                    <h:outputText value="#{c.producto.nombre_producto}"/>
+                         emptyMessage="No hay productos en el carrito" styleClass="tabla-usuarios" style="width:90%;">
+                <p:column headerText="Producto">
+                    <h:outputText value="#{c.producto.nombre_producto}" />
                 </p:column>
-
-                <p:column headerText="Cantidad" style="text-align:center;">
-                   
+                <p:column headerText="Cantidad">
+                    <h:outputText value="#{c.cantidad}" />
                 </p:column>
-
-                <p:column headerText="Valor Unitario" style="text-align:center;">
-                    <h:outputText value="#{c.valor_unitario}"/>
+                <p:column headerText="Subtotal">
+                    <h:outputText value="#{c.cantidad * c.valor_unitario}">
+                        <f:convertNumber type="currency" currencySymbol="$" />
+                    </h:outputText>
                 </p:column>
-
-                <p:column headerText="Subtotal" style="text-align:center;">
-                    <h:outputText value="#{c.cantidad * c.valor_unitario}"/>
-                </p:column>
-
-                <p:column headerText="Acciones" style="text-align:center;">
+                <p:column headerText="Eliminar">
                     <p:commandButton value="Eliminar" icon="pi pi-trash"
                                      actionListener="#{ventaBean.eliminarDelCarrito(c)}"
-                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:subtotal :formNuevaVenta:total"/>
+                                     update=":formNuevaVenta:carritoVentas :formNuevaVenta:totales :formNuevaVenta:messages"
+                                     styleClass="ui-button-danger"/>
                 </p:column>
             </p:dataTable>
 
-            <br/>
+            <!-- Descuento y Abono -->
+            <h3>Descuento y Abono</h3>
+            <h:panelGrid columns="2" cellpadding="5" styleClass="form-grid">
+                <h:outputLabel for="descuento" value="Descuento (%):" />
+                <p:inputText id="descuento" value="#{ventaBean.ventaActual.descuento}" size="5">
+                    <f:convertNumber integerOnly="true"/>
+                    <p:ajax event="keyup" update="totales"/>
+                </p:inputText>
 
-            <!-- Totales -->
-            <h:panelGrid columns="2" style="margin: 0 auto; text-align:center;" cellpadding="6">
-                <h:outputLabel value="Subtotal:"/>
-                <h:outputText id="subtotal" value="#{ventaBean.subtotal}"/>
-
-                <h:outputLabel value="Total:"/>
-                <h:outputText id="total" value="#{ventaBean.total}"/>
+                <h:outputLabel for="abono" value="Abono:" />
+                <p:inputText id="abono" value="#{ventaBean.ventaActual.abono}" size="5">
+                    <f:convertNumber maxFractionDigits="2"/>
+                    <p:ajax event="keyup" update="totales"/>
+                </p:inputText>
             </h:panelGrid>
 
-            <br/>
+            <!-- Totales -->
+            <p:panel id="totales" style="width:300px;margin-top:20px;">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel value="Subtotal:"/>
+                    <h:outputText value="#{ventaBean.subtotal}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+
+                    <h:outputLabel value="Descuento aplicado:"/>
+                    <h:outputText value="#{ventaBean.subtotal * (ventaBean.ventaActual.descuento / 100)}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+
+                    <h:outputLabel value="Total:"/>
+                    <h:outputText value="#{ventaBean.total}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+
+                    <h:outputLabel value="Abono:"/>
+                    <h:outputText value="#{ventaBean.ventaActual.abono}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+                </h:panelGrid>
+            </p:panel>
 
             <!-- Botón Guardar -->
-            <div style="text-align:center; margin-top:20px;">
-                <p:commandButton value="Guardar Venta" actionListener="#{ventaBean.guardarVenta}"
-                                 ajax="false" styleClass="logout-btn"/>
+            <div style="margin-top:20px; text-align:right;">
+                <p:commandButton value="Guardar Venta"
+                                 action="#{ventaBean.guardarVenta}"
+                                 update="messages carritoVentas totales tablaProductos"
+                                 styleClass="ui-button-success"/>
             </div>
         </h:form>
     </main>
 
+    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="contact-info">

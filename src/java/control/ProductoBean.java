@@ -37,20 +37,18 @@ public class ProductoBean {
             byte[] pdfBytes = JasperExportManager.exportReportToPdf(jprint);
 
             HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-
             resp.setContentType("application/pdf");
             resp.addHeader("Content-Disposition", "attachment; filename=\"Productos.pdf\"");
 
             try (ServletOutputStream stream = resp.getOutputStream()) {
                 JasperExportManager.exportReportToPdfStream(jprint, stream);
-
                 stream.flush();
-                stream.close();
             }
             FacesContext.getCurrentInstance().responseComplete();
 
         } catch (JRException | IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error creando reporte"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error creando reporte"));
         }
     }
 
@@ -101,5 +99,10 @@ public class ProductoBean {
 
     public void limpiar() {
         producto = new Producto();
+    }
+
+    // ✅ NUEVO: Método para recargar productos desde otros beans (p.ej., VentaBean)
+    public void cargarProductos() {
+        listar(); // reutiliza el método existente para no duplicar código
     }
 }

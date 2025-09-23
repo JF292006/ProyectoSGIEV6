@@ -2,34 +2,41 @@ package control;
 
 import dao.VentaDAO;
 import dao.ProductoDAO;
-import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import modelo.Producto;
-import modelo.Usuarios;
 import modelo.Venta;
 import modelo.Venta_has_producto;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.*;
+import javax.faces.bean.SessionScoped;
+
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class VentaBean implements Serializable {
+    
+    
 
     private Venta ventaActual;
+    private Venta ventaSeleccionada;
     private List<Venta> listaVentas;
-    private List<Venta_has_producto> carrito;  // Carrito de productos
-    private Producto productoSeleccionado;
-    private int cantidadSeleccionada;
+    private List<Venta_has_producto> carrito;
+    private List<Venta_has_producto> detallesVenta;
+
     private int usuarioSeleccionado;
+    private Map<Integer, Number> cantidadesPorProducto;
 
     private VentaDAO ventaDAO;
     private ProductoDAO productoDAO;
+
+    @ManagedProperty("#{productoBean}")
+    private ProductoBean productoBean;
 
     @PostConstruct
     public void init() {
@@ -37,17 +44,18 @@ public class VentaBean implements Serializable {
         ventaActual.setFecha_factura(new Date());
         listaVentas = new ArrayList<>();
         carrito = new ArrayList<>();
+        detallesVenta = new ArrayList<>();
+        cantidadesPorProducto = new HashMap<>();
         ventaDAO = new VentaDAO();
         productoDAO = new ProductoDAO();
         listarVentas();
     }
 
-    // ------------------ CRUD VENTAS ------------------
-
     public void listarVentas() {
         listaVentas = ventaDAO.listar();
     }
 
+    /** Guarda la venta y descuenta stock **/
     public void guardarVenta() {
         try {
             if (usuarioSeleccionado == 0) {
@@ -55,178 +63,137 @@ public class VentaBean implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un cliente", ""));
                 return;
             }
-
             if (carrito == null || carrito.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe agregar productos a la venta", ""));
                 return;
             }
 
-            // Asociar cliente
             ventaActual.setUsuarios_id_usuario(usuarioSeleccionado);
-
-            // Calcular totales
             ventaActual.setSubtotal(getSubtotal());
             ventaActual.setValor_total(getTotal());
 
             ventaDAO.agregar(ventaActual, carrito);
 
+            if (productoBean != null) productoBean.cargarProductos();
+
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta registrada exitosamente", null));
 
-            // Reset
-            ventaActual = new Venta();
-            ventaActual.setFecha_factura(new Date());
-            carrito = new ArrayList<>();
+            limpiarFormulario();
             listarVentas();
 
-        } catch (SQLException e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error registrando venta", e.getMessage()));
-        }
-    }
-
-    public void eliminarVenta(int idVenta) {
-        try {
-            ventaDAO.eliminar(idVenta);
-            listarVentas();
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta eliminada", ""));
-        } catch (SQLException e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error eliminando venta", e.getMessage()));
-        }
-    }
-
-    public void verDetalle(Venta v) {
-        try {
-            this.ventaActual = ventaDAO.buscar(v.getIdfactura());
-            this.carrito = ventaDAO.listarDetalle(v.getIdfactura());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("detalleVenta.xhtml");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error cargando detalle", e.getMessage()));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getMessage(), null));
         }
     }
 
-    // ------------------ CARRITO ------------------
+    private void limpiarFormulario() {
+        ventaActual = new Venta();
+        ventaActual.setFecha_factura(new Date());
+        carrito = new ArrayList<>();
+        cantidadesPorProducto = new HashMap<>();
+        usuarioSeleccionado = 0;
+    }
 
+    /** Agrega un producto al carrito **/
     public void agregarProducto(Producto p) {
-        if (cantidadSeleccionada <= 0) {
+        int cantidad = getCantidadProducto(p.getIdproducto());
+        if (cantidad <= 0) cantidad = 1;
+        if (p.getStock() < cantidad) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", ""));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Stock insuficiente. Disponible: " + p.getStock(), ""));
             return;
         }
 
-        // Verificar stock
-        if (p.getStock() < cantidadSeleccionada) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                    "Stock insuficiente. Disponible: " + p.getStock(), ""));
-            return;
-        }
+        Venta_has_producto existente = carrito.stream()
+                .filter(item -> item.getProducto().getIdproducto() == p.getIdproducto())
+                .findFirst().orElse(null);
 
-        Venta_has_producto item = null;
-        for (Venta_has_producto vhp : carrito) {
-            if (vhp.getProducto().getIdproducto() == p.getIdproducto()) {
-                item = vhp;
-                break;
-            }
-        }
-
-        if (item == null) {
-            item = new Venta_has_producto();
-            item.setProducto(p);
-            item.setCantidad(cantidadSeleccionada);
-            item.setValor_unitario(p.getPrecio_producto());
-            carrito.add(item);
-        } else {
-            int nuevaCantidad = item.getCantidad() + cantidadSeleccionada;
-
+        if (existente != null) {
+            int nuevaCantidad = existente.getCantidad() + cantidad;
             if (nuevaCantidad > p.getStock()) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                        "No se puede agregar más del stock disponible (" + p.getStock() + ")", ""));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se puede superar el stock disponible: " + p.getStock(), ""));
                 return;
             }
-            item.setCantidad(nuevaCantidad);
+            existente.setCantidad(nuevaCantidad);
+        } else {
+            Venta_has_producto nuevo = new Venta_has_producto();
+            nuevo.setProducto(p);
+            nuevo.setCantidad(cantidad);
+            nuevo.setValor_unitario(p.getPrecio_producto());
+            carrito.add(nuevo);
         }
-
-        cantidadSeleccionada = 0;
+        cantidadesPorProducto.put(p.getIdproducto(), 1);
     }
 
     public void eliminarDelCarrito(Venta_has_producto item) {
         carrito.remove(item);
     }
 
-    // ------------------ CALCULOS ------------------
-
     public double getSubtotal() {
-        double subtotal = 0.0;
-        if (carrito != null) {
-            for (Venta_has_producto item : carrito) {
-                subtotal += item.getCantidad() * item.getValor_unitario();
-            }
-        }
-        return subtotal;
+        return carrito.stream().mapToDouble(i -> i.getCantidad() * i.getValor_unitario()).sum();
     }
 
     public double getTotal() {
         double total = getSubtotal();
-        if (ventaActual != null) {
-            total -= ventaActual.getDescuento();
-            total -= ventaActual.getAbono();
+        if (ventaActual.getDescuento() > 0) total -= getSubtotal() * ventaActual.getDescuento() / 100;
+        if (ventaActual.getAbono() > 0) total -= ventaActual.getAbono();
+        return Math.max(total, 0);
+    }
+
+    public int getCantidadProducto(int idProducto) {
+        Number n = cantidadesPorProducto.get(idProducto);
+        return (n == null) ? 1 : Math.max(n.intValue(), 1);
+    }
+
+    /** Preparar y ver detalle **/
+public String verDetalle(Venta venta) {
+    System.out.println("VER DETALLE → ID factura: " + venta.getIdfactura());
+    this.ventaSeleccionada = venta;
+    this.detallesVenta = ventaDAO.listarDetalle(venta.getIdfactura());
+    System.out.println("VER DETALLE → Detalles obtenidos: " + detallesVenta.size());
+    for (Venta_has_producto d : detallesVenta) {
+        System.out.println("Producto: " + d.getProducto().getNombre_producto() +
+                           ", Cantidad: " + d.getCantidad());
+    }
+    return "/ventas/detalleVenta.xhtml?faces-redirect=true";
+}
+
+
+
+
+    /** Eliminar venta y devolver stock **/
+    public void eliminarVenta(int idVenta) {
+        try {
+            ventaDAO.eliminar(idVenta);
+            listarVentas();
+            if (productoBean != null) productoBean.cargarProductos();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta eliminada y stock devuelto", null));
+        } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error eliminando: " + e.getMessage(), null));
         }
-        return total;
     }
 
-    // ------------------ GETTERS Y SETTERS ------------------
-
-    public Venta getVentaActual() {
-        return ventaActual;
-    }
-
-    public void setVentaActual(Venta ventaActual) {
-        this.ventaActual = ventaActual;
-    }
-
-    public List<Venta> getListaVentas() {
-        return listaVentas;
-    }
-
-    public void setListaVentas(List<Venta> listaVentas) {
-        this.listaVentas = listaVentas;
-    }
-
-    public List<Venta_has_producto> getCarrito() {
-        return carrito;
-    }
-
-    public void setCarrito(List<Venta_has_producto> carrito) {
-        this.carrito = carrito;
-    }
-
-    public Producto getProductoSeleccionado() {
-        return productoSeleccionado;
-    }
-
-    public void setProductoSeleccionado(Producto productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
-    }
-
-    public int getCantidadSeleccionada() {
-        return cantidadSeleccionada;
-    }
-
-    public void setCantidadSeleccionada(int cantidadSeleccionada) {
-        this.cantidadSeleccionada = cantidadSeleccionada;
-    }
-
-    public int getUsuarioSeleccionado() {
-        return usuarioSeleccionado;
-    }
-
-    public void setUsuarioSeleccionado(int usuarioSeleccionado) {
-        this.usuarioSeleccionado = usuarioSeleccionado;
-    }
+    // ==== GETTERS / SETTERS ====
+    public Venta getVentaActual() { return ventaActual; }
+    public void setVentaActual(Venta ventaActual) { this.ventaActual = ventaActual; }
+    public List<Venta> getListaVentas() { return listaVentas; }
+    public void setListaVentas(List<Venta> listaVentas) { this.listaVentas = listaVentas; }
+    public List<Venta_has_producto> getCarrito() { return carrito; }
+    public void setCarrito(List<Venta_has_producto> carrito) { this.carrito = carrito; }
+    public int getUsuarioSeleccionado() { return usuarioSeleccionado; }
+    public void setUsuarioSeleccionado(int usuarioSeleccionado) { this.usuarioSeleccionado = usuarioSeleccionado; }
+    public Map<Integer, Number> getCantidadesPorProducto() { return cantidadesPorProducto; }
+    public void setCantidadesPorProducto(Map<Integer, Number> cantidadesPorProducto) { this.cantidadesPorProducto = cantidadesPorProducto; }
+    public ProductoBean getProductoBean() { return productoBean; }
+    public void setProductoBean(ProductoBean productoBean) { this.productoBean = productoBean; }
+    public Venta getVentaSeleccionada() { return ventaSeleccionada; }
+    public void setVentaSeleccionada(Venta ventaSeleccionada) { this.ventaSeleccionada = ventaSeleccionada; }
+    public List<Venta_has_producto> getDetallesVenta() { return detallesVenta; }
+    public void setDetallesVenta(List<Venta_has_producto> detallesVenta) { this.detallesVenta = detallesVenta; }
 }

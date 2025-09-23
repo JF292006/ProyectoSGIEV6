@@ -1,25 +1,44 @@
-
 package modelo;
 
 public class Venta_has_producto {
-  
-    private int venta_idfactura, productos_idproducto;
 
-    public int getVenta_idfactura() {
-        return venta_idfactura;
+    private int id; // opcional si la tabla tiene PK compuesta se puede omitir
+    private Venta venta;
+    private Producto producto;
+    private int cantidad;
+    private double valor_unitario;
+
+    // --- Getters y Setters ---
+    public Venta getVenta() {
+        return venta;
     }
 
-    public void setVenta_idfactura(int venta_idfactura) {
-        this.venta_idfactura = venta_idfactura;
+    public void setVenta(Venta venta) {
+        this.venta = venta;
     }
 
-    public int getProductos_idproducto() {
-        return productos_idproducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setProductos_idproducto(int productos_idproducto) {
-        this.productos_idproducto = productos_idproducto;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
-    
-    
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getValor_unitario() {
+        return valor_unitario;
+    }
+
+    public void setValor_unitario(double valor_unitario) {
+        this.valor_unitario = valor_unitario;
+    }
 }
+

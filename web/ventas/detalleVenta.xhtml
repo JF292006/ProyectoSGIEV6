@@ -4,101 +4,80 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Detalle de Venta</title>
-        <h:outputStylesheet library="css" name="estilosadmin.css"/>
-    </h:head>
+<h:head>
+    <title>Detalle de Venta</title>
+    <h:outputStylesheet library="css" name="estilosadmin.css"/>
+</h:head>
+<h:body>
+<header>
+    <div class="logo-container">
+        <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+        <h1>Panel de Administración</h1>
+    </div>
+    <div class="user-info">
+        <h:form>
+            <p:commandButton value="Volver a Ventas"
+                             action="/ventas/listarVentas.xhtml?faces-redirect=true"
+                             ajax="false"/>
+        </h:form>
+    </div>
+</header>
 
-    <h:body>
-        <!-- HEADER -->
-        <header>
-            <div class="logo-container">
-                <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
-                <h1>Panel de Administración</h1>
-            </div>
+<main class="admin-dashboard">
+    <h2 style="text-align:center;">Detalle de Venta</h2>
 
-            <div class="user-info">
-                <h:form>
-                    <p:commandButton value="Volver a Ventas"
-                                     styleClass="logout-btn"
-                                     action="/ventas/listarVentas.xhtml?faces-redirect=true"
-                                     ajax="false"/>
-                </h:form>
-            </div>
-        </header>
+    <h:panelGrid columns="2" style="margin:20px auto;">
+        <h:outputText value="ID Factura:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.idfactura}"/>
 
-        <!-- MAIN -->
-        <main class="admin-dashboard">
-            <h2 style="text-align:center; margin-bottom:20px;">Detalle de Venta</h2>
+        <h:outputText value="Usuario"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.usuario.p_nombre} #{ventaBean.ventaSeleccionada.usuario.p_apellido}"/>
 
-            <!-- Info general de la venta -->
-            <h:panelGrid columns="2" style="margin: 20px auto;" columnClasses="label,value">
-                <h:outputText value="ID Factura:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.idfactura}" />
+        <h:outputText value="Fecha:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.fecha_factura}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:outputText>
 
-                <h:outputText value="Cliente:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.usuario.p_nombre} #{ventaBean.ventaSeleccionada.usuario.p_apellido}" />
+        <h:outputText value="Subtotal:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.subtotal}"/>
 
-                <h:outputText value="Fecha:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.fecha_factura}">
-                    <f:convertDateTime pattern="yyyy-MM-dd" />
+        <h:outputText value="Descuento:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.descuento}"/>
+
+        <h:outputText value="Abono:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.abono}"/>
+
+        <h:outputText value="Valor Total:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.valor_total}"/>
+
+        <h:outputText value="Observaciones:"/>
+        <h:outputText value="#{ventaBean.ventaSeleccionada.observaciones}"/>
+    </h:panelGrid>
+
+    <h3 style="text-align:center;">Productos de la Venta</h3>
+    <h:form>
+        <p:dataTable value="#{ventaBean.detallesVenta}" var="d" paginator="true" rows="5"
+                     emptyMessage="No hay productos para esta venta.">
+            <p:column headerText="Producto">
+                <h:outputText value="#{d.producto.nombre_producto}"/>
+            </p:column>
+            <p:column headerText="Cantidad">
+                <h:outputText value="#{d.cantidad}"/>
+            </p:column>
+            <p:column headerText="Valor Unitario">
+                <h:outputText value="#{d.valor_unitario}"/>
+            </p:column>
+            <p:column headerText="Subtotal">
+                <h:outputText value="#{d.cantidad * d.valor_unitario}">
+                    <f:convertNumber type="currency" currencySymbol="$"/>
                 </h:outputText>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</main>
 
-                <h:outputText value="Subtotal:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.subtotal}" />
-
-                <h:outputText value="Descuento:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.descuento}" />
-
-                <h:outputText value="Abono:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.abono}" />
-
-                <h:outputText value="Valor Total:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.valor_total}" />
-
-                <h:outputText value="Observaciones:" />
-                <h:outputText value="#{ventaBean.ventaSeleccionada.observaciones}" />
-            </h:panelGrid>
-
-            <!-- Detalles de productos -->
-            <h3 style="text-align:center; margin:20px 0;">Productos de la Venta</h3>
-
-            <h:form>
-                <p:dataTable value="#{ventaBean.detallesVenta}" var="d"
-                             paginator="true" rows="5"
-                             styleClass="tabla-usuarios">
-
-                    <p:column headerText="Producto">
-                        <h:outputText value="#{d.producto.nombre_producto}" />
-                    </p:column>
-
-                    <p:column headerText="Cantidad">
-                        <h:outputText value="#{d.cantidad}" />
-                    </p:column>
-
-                    <p:column headerText="Valor Unitario">
-                        <h:outputText value="#{d.valor_unitario}" />
-                    </p:column>
-
-                    <p:column headerText="Subtotal">
-                        <h:outputText value="#{d.cantidad * d.valor_unitario}" />
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </main>
-
-        <!-- FOOTER -->
-        <footer>
-            <div class="footer-content">
-                <div class="contact-info">
-                    <h3>Panel Administrativo</h3>
-                </div>
-                <div class="system-info">
-                    <p>© 2025 Tienda Naturista - Sistema de Administración</p>
-                </div>
-            </div>
-        </footer>
-    </h:body>
+<footer>
+    <p>© 2025 Tienda Naturista</p>
+</footer>
+</h:body>
 </html>

@@ -72,6 +72,15 @@ public class Venta {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-    
+    // En modelo.Venta
+private Usuarios usuario;
+
+public Usuarios getUsuario() {
+    return usuario;
+}
+public void setUsuario(Usuarios usuario) {
+    this.usuario = usuario;
+}
+
     
 }
