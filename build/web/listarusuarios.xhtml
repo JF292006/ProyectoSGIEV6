@@ -33,8 +33,23 @@
             <h2 style="text-align:center; margin-bottom:20px;">Gestión de Usuarios</h2>
 
             <h:form>
+                
+                <div style="margin-bottom:15px; display:flex; justify-content: space-between;">
+                    <p:fileUpload 
+                        listener="#{usuariosBean.cargaMasivaUsuarios}" 
+                        mode="advanced" 
+                        auto="true" 
+                        allowTypes="/(\.|\/)(xls)$/" 
+                        label="Carga Masiva Excel (.xls)"
+                        styleClass="logout-btn upload-btn"/>
+                    
+                    
+                    
+                </div>
 
                 <div style="margin-bottom:15px; text-align:right;">
+                    
+                    
                     <p:commandButton value="Agregar Usuario"
                                      styleClass="logout-btn"
                                      action="#{usuariosBean.irAgregarUsuario()}"
@@ -48,7 +63,8 @@
                              paginator="true" rows="5"
                              styleClass="tabla-usuarios">
 
-                    <p:column headerText="ID">
+                    <!-- Columna ID con filtro -->
+                    <p:column headerText="ID" filterBy="#{u.id_usuario}" filterMatchMode="contains">
                         <h:outputText value="#{u.id_usuario}"/>
                     </p:column>
 
@@ -68,7 +84,8 @@
                         <h:outputText value="#{u.p_apellido}"/>
                     </p:column>
 
-                    <p:column headerText="Correo">
+                    <!-- Columna Correo con filtro -->
+                    <p:column headerText="Correo" filterBy="#{u.correo}" filterMatchMode="contains">
                         <h:outputText value="#{u.correo}"/>
                     </p:column>
 
@@ -89,6 +106,7 @@
                                          onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
                     </p:column>
                 </p:dataTable>
+
 
 
             </h:form>

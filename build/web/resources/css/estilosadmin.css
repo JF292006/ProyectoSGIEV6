@@ -238,3 +238,17 @@ footer {
     }
 }
 
+.upload-btn .ui-fileupload-choose {
+    background-color: #4CAF50; /* Verde similar a otros botones */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+
+

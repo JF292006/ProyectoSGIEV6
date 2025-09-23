@@ -30,14 +30,14 @@
 
             <h:form enctype="multipart/form-data">
                 <div style="margin-bottom:15px; display:flex; justify-content: space-between;">
-                    <!-- Botón izquierda: Carga masiva -->
+                    
                     <p:fileUpload 
                         listener="#{mensajeriaBean.cargaMasivaDebug}" 
                         mode="advanced" 
                         auto="true" 
                         allowTypes="/(\.|\/)(xls)$/" 
                         label="Carga Masiva Excel (.xls)"
-                        styleClass="upload-btn"/>
+                        styleClass="logout-btn upload-btn"/>
 
                     <!-- Botón derecha: Agregar mensajería -->
                     <p:commandButton value="Agregar Mensajería"
@@ -50,7 +50,7 @@
                              paginator="true" rows="5"
                              styleClass="tabla-usuarios">
 
-                    <p:column headerText="ID">
+                    <p:column headerText="ID" filterBy="#{m.idmensajeria}" filterMatchMode="contains">
                         <h:outputText value="#{m.idmensajeria}"/>
                     </p:column>
                     <p:column headerText="Nombre">
@@ -62,7 +62,7 @@
                     <p:column headerText="Dirección">
                         <h:outputText value="#{m.direccion_mensajeria}"/>
                     </p:column>
-                    <p:column headerText="Cobertura">
+                    <p:column headerText="Cobertura" filterBy="#{m.cobertura}" filterMatchMode="contains">
                         <h:outputText value="#{m.cobertura}"/>
                     </p:column>
 

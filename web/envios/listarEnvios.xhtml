@@ -41,7 +41,7 @@
                              paginator="true" rows="5"
                              styleClass="tabla-usuarios">
 
-                    <p:column headerText="ID">
+                    <p:column headerText="ID" filterBy="#{e.idenvio}" filterMatchMode="contains">
                         <h:outputText value="#{e.idenvio}"/>
                     </p:column>
                     <p:column headerText="Estado">
@@ -57,7 +57,7 @@
                             <f:convertDateTime pattern="yyyy-MM-dd"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Dirección Envío">
+                    <p:column headerText="Dirección Envío" filterBy="#{e.direccion_envio}" filterMatchMode="contains">
                         <h:outputText value="#{e.direccion_envio}"/>
                     </p:column>
                     <p:column headerText="Dirección Salida">
