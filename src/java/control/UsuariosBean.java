@@ -7,13 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile;
 import javax.faces.context.FacesContext;
 import modelo.Usuarios;
 
@@ -336,6 +341,105 @@ public class UsuariosBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error eliminando usuario", e.getMessage()));
         }
     }
+    
+    public void cargaMasivaUsuarios(FileUploadEvent event) {
+        UploadedFile file = event.getFile();
+
+        try (Workbook workbook = new HSSFWorkbook(file.getInputStream()); Connection con = ConDB.conectar()) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            String sql = "INSERT INTO usuarios (num_identificacion, tipo_usu, clave, p_nombre, s_nombre, p_apellido, s_apellido, correo, telefono, salario, fecha_nacimiento, direccion) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            DataFormatter formatter = new DataFormatter();
+
+            int filasInsertadas = 0;
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    continue; // Saltar header
+                }
+                try {
+                    // Leer celdas
+                    String idStr = formatter.formatCellValue(row.getCell(0)).trim();
+                    String tipoUsu = formatter.formatCellValue(row.getCell(1)).trim();
+                    String clave = formatter.formatCellValue(row.getCell(2)).trim();
+                    String pNombre = formatter.formatCellValue(row.getCell(3)).trim();
+                    String sNombre = formatter.formatCellValue(row.getCell(4)).trim();
+                    String pApellido = formatter.formatCellValue(row.getCell(5)).trim();
+                    String sApellido = formatter.formatCellValue(row.getCell(6)).trim();
+                    String correo = formatter.formatCellValue(row.getCell(7)).trim();
+                    String telStr = formatter.formatCellValue(row.getCell(8)).trim();
+                    String salarioStr = formatter.formatCellValue(row.getCell(9)).trim();
+                    Cell fechaCell = row.getCell(10);
+                    String direccion = formatter.formatCellValue(row.getCell(11)).trim();
+
+                    if (idStr.isEmpty() && tipoUsu.isEmpty() && clave.isEmpty() && pNombre.isEmpty()
+                            && pApellido.isEmpty() && correo.isEmpty() && telStr.isEmpty()) {
+                        continue; // Fila vacía
+                    }
+
+                    long numIdentificacion = Long.parseLong(idStr.replaceAll("\\D", ""));
+                    long telefono = Long.parseLong(telStr.replaceAll("\\D", ""));
+                    long salario = salarioStr.isEmpty() ? 0 : Long.parseLong(salarioStr);
+                    String claveEncriptada = clave.isEmpty() ? "" : Utilidades.encriptar(clave);
+
+                    // Leer fecha
+                    java.sql.Date fechaNacimiento = null;
+                    if (fechaCell != null && fechaCell.getCellType() != Cell.CELL_TYPE_BLANK) {
+                        if (DateUtil.isCellDateFormatted(fechaCell)) {
+                            java.util.Date utilDate = fechaCell.getDateCellValue();
+                            fechaNacimiento = new java.sql.Date(utilDate.getTime());
+                        } else {
+                            String fechaStr = formatter.formatCellValue(fechaCell).trim();
+                            java.util.Date utilDate = null;
+                            // Intentar varios formatos
+                            String[] formatos = {"yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yy"};
+                            for (String f : formatos) {
+                                try {
+                                    utilDate = new SimpleDateFormat(f).parse(fechaStr);
+                                    break; // salió bien
+                                } catch (ParseException e) {
+                                    // Ignorar y probar siguiente formato
+                                }
+                            }
+                            if (utilDate == null) {
+                                throw new Exception("Fecha inválida: " + fechaStr);
+                            }
+                            fechaNacimiento = new java.sql.Date(utilDate.getTime());
+                        }
+                    }
+
+                    // Preparar y ejecutar statement
+                    ps.setLong(1, numIdentificacion);
+                    ps.setString(2, tipoUsu);
+                    ps.setString(3, claveEncriptada);
+                    ps.setString(4, pNombre);
+                    ps.setString(5, sNombre);
+                    ps.setString(6, pApellido);
+                    ps.setString(7, sApellido);
+                    ps.setString(8, correo);
+                    ps.setLong(9, telefono);
+                    ps.setLong(10, salario);
+                    ps.setDate(11, fechaNacimiento);
+                    ps.setString(12, direccion);
+
+                    ps.executeUpdate();
+                    filasInsertadas++;
+
+                } catch (Exception filaEx) {
+                    System.err.println("Error en fila " + (row.getRowNum() + 1) + ": " + filaEx.getMessage());
+                }
+            }
+
+            System.out.println("Carga masiva finalizada. Filas insertadas: " + filasInsertadas);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     

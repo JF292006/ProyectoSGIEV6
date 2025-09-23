@@ -215,10 +215,10 @@
 
             <h:panelGroup styleClass="navbar">
 
-                <p:commandButton value="Ir a Panel" action="/vistas/operario/ope.xhtml?faces-redirect=true" styleClass="btn" />
-                <p:commandButton value="Ir a Ventas" action="/vistas/operario/crudventa.xhtml?faces-redirect=true" styleClass="btn" />
-                <p:commandButton value="Ir a Inventario" action="/vistas/operario/crudinventario.xhtml?faces-redirect=true" styleClass="btn" />
-                <p:commandButton value="Ir a Usuarios" action="/vistas/operario/crudadmin.xhtml?faces-redirect=true" styleClass="btn" />
+                <p:commandButton value="Ir a Panel" action="/admin.xhtml" styleClass="btn"/>
+                <p:commandButton value="Ir a Proveedores" action="/proveedor/index" styleClass="btn"/>
+                <p:commandButton value="Ir a Inventario" styleClass="btn"/>
+                <p:commandButton value="Ir a Usuarios" action="/listarusuarios.xhtml" styleClass="btn"/>
             </h:panelGroup>
 
             <h:form id="nuevoprod">
@@ -227,11 +227,11 @@
 
                 <p:commandButton value="Reporte PDF" ajax="false" styleClass="pdf-btn btn" style="margin-left:20px" actionListener="#{productoBean.exportarPDF()}"/>
 
-                <p:dataTable id="tablaProds" value="#{productoBean.lstProds}" var="producto" styleClass="ui-datatable" editable="true" widgetVar="dtProds">
-                    <p:column headerText="ID">
+                <p:dataTable id="tablaProds" value="#{productoBean.lstProds}" var="producto" styleClass="ui-datatable" editable="true" widgetVar="dtProds" filterEvent="keyup">
+                    <p:column headerText="ID" filterBy="#{producto.idproducto}" >
                         <h:outputText value="#{producto.idproducto}"/>
                     </p:column>
-                    <p:column headerText="Nombre">
+                    <p:column headerText="Nombre" filterBy="#{producto.nombre_producto}">
                         <h:outputText value="#{producto.nombre_producto}"/>
                     </p:column>
                     <p:column headerText="Precio">
@@ -240,13 +240,13 @@
                     <p:column headerText="Descripcion">
                         <h:outputText value="#{producto.descripcion_producto}"/>
                     </p:column>
-                    <p:column headerText="Tipo">
+                    <p:column headerText="Tipo" filterBy="#{producto.nombre_tipo}">
                         <h:outputText value="#{producto.nombre_tipo}"/>
                     </p:column>
-                    <p:column headerText="Registro Sanitario">
+                    <p:column headerText="Registro Sanitario" filterBy="#{producto.registrosanitario}">
                         <h:outputText value="#{producto.registrosanitario}"/>
                     </p:column>
-                    <p:column headerText="Proveedor">
+                    <p:column headerText="Proveedor" filterBy="#{producto.prov.nombre_proveedor}">
                         <h:outputText value="#{producto.prov.nombre_proveedor}"/>
                     </p:column>
                             <p:column headerText="Acciones" style="width:250px; text-align:center">
@@ -265,7 +265,7 @@
                             </p:column>
                 </p:dataTable>
             </h:form>
-
+            <!-- duro -->
 
             <p:dialog header="Editar Producto" widgetVar="dlgEditar" modal="true" resizable="false" id="dlgEditar">
                 <h:form id="formEditar">

@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>src/java/control/UsuariosBean.java</url>
-            <bookmark id="1">
-                <name/>
-                <line>0</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/web/ventas/listarVentas.xhtml</file>
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/web/ventas/nuevaVenta.xhtml</file>
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/web/ventas/detalleVenta.xhtml</file>
@@ -27,6 +19,18 @@
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/src/java/modelo/Producto.java</file>
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/src/java/control/EnviosBean.java</file>
             <file>file:/C:/Users/Obaho%20Asesores/Desktop/SENA/ProyectoSGIEV6/src/java/control/ProductoDataSource.java</file>
+=======
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/src/java/dao/EnviosDAO.java</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/web/envios/listarEnviosoperario.xhtml</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/web/mensajeria/listarMensajeriaoperario.xhtml</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/src/java/control/EnviosBean.java</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/src/java/control/MensajeriaBean.java</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/web/mensajeria/editarMensajeriaoperario.xhtml</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/web/operario.xhtml</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/web/admin.xhtml</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/src/java/control/ProductoBean.java</file>
+            <file>file:/C:/Users/User/Music/pruebas/ProyectoSGIEV6/src/java/control/CorreoBean.java</file>
+>>>>>>> 566d591c0040ba101d0eebfd615e8f3520411506
         </group>
     </open-files>
 </project-private>

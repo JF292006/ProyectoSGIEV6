@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Enviar Correos Usuarios</title>
+        <style>
+            body {
+                background-color: #f0fdf4; /* verde muy clarito */
+                font-family: Arial, sans-serif;
+            }
+
+            .form-card {
+                max-width: 500px;
+                margin: 50px auto;
+                background: #ffffff;
+                border-radius: 15px;
+                padding: 25px;
+                box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+                border-top: 5px solid #22c55e; /* verde */
+            }
+
+            .form-title {
+                text-align: center;
+                color: #16a34a; /* verde oscuro */
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .p-inputtext, .p-inputtextarea {
+                width: 100% !important;
+            }
+
+            .send-btn {
+                width: 100%;
+                background-color: #22c55e !important;
+                border: none !important;
+            }
+
+            .send-btn:hover {
+                background-color: #16a34a !important;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <p:growl id="msj" showSummary="true" showDetail="true" skipDetailIfEqualsSummary="true"/>
+        <f:event type="preRenderView" listener="#{correoBean.listarUsuarios()}"/>
+        <h:form>
+            <div class="form-card">
+                <div class="form-title">Enviar Correo</div>
+
+                <p:messages closable="true" />
+
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%">
+                    <h:outputLabel for="destino" value="Para:" />
+                    <p:selectManyCheckbox id="destino" 
+                                          value="#{correoBean.dest}" 
+                                          layout="grid" 
+                                          columns="3">
+                        <f:selectItems value="#{correoBean.listaUsuarios}" 
+                                       var="usr" 
+                                       itemValue="#{usr.correo}" 
+                                       itemLabel="#{usr.p_nombre}" />
+                    </p:selectManyCheckbox>
+                    <h:outputLabel for="asunto" value="Asunto:" />
+                    <p:inputText id="asunto" value="#{correoBean.asunto}" size="30" required="true" requiredMessage="Debe escribir un asunto" />
+
+                    <h:outputLabel for="mensaje" value="Mensaje:" />
+                    <p:inputTextarea id="mensaje" value="#{correoBean.contenido}" cols="35" rows="5" autoResize="true" required="true" requiredMessage="Debe escribir un mensaje"
+                                     placeholder="Escribe tu mensaje..." />
+                </p:panelGrid>
+
+                <p:panelGrid columns="2">
+
+                    <p:commandButton value="Enviar Correo" 
+                                     actionListener="#{correoBean.enviarCorreos()}"
+                                     action="listarusuarios"
+                                     update="@form"
+                                     icon="pi pi-send"
+                                     styleClass="send-btn p-mt-3" 
+                                     ajax="false"/>
+                    <p:commandButton value="Cancelar" immediate="true" action="listarusuarios"/>
+                </p:panelGrid>
+            </div>
+        </h:form>
+
+    </h:body>
+</html>

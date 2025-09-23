@@ -238,6 +238,7 @@ footer {
     }
 }
 
+<<<<<<< HEAD
 .stock-bajo {
     color: #ff0000;
     font-weight: bold;
@@ -246,3 +247,19 @@ footer {
 .stock-normal {
     color: #008000;
 }
+=======
+.upload-btn .ui-fileupload-choose {
+    background-color: #4CAF50; /* Verde similar a otros botones */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+
+
+>>>>>>> 566d591c0040ba101d0eebfd615e8f3520411506
