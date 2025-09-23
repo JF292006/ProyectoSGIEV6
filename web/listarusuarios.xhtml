@@ -39,6 +39,10 @@
                                      styleClass="logout-btn"
                                      action="#{usuariosBean.irAgregarUsuario()}"
                                      ajax="false"/>
+                    <p:commandButton value="Enviar correos" 
+                                     styleClass="logout-btn"
+                                     ajax="false"
+                                     action="correoUsuarios"/>
                 </div>
                 <p:dataTable value="#{usuariosBean.listaUsuarios}" var="u"
                              paginator="true" rows="5"
