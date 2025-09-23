@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Agregar Mensajería</title>
+        <h:outputStylesheet library="css" name="estilosadmin.css"/> 
+    </h:head>
+
+    <h:body>
+        <header>
+            <div class="logo-container">
+                <h:graphicImage library="images" name="logo.png" styleClass="logo"/>
+                <h1>Panel de Administración</h1>
+            </div>
+
+            <div class="user-info">
+                <h:form>
+                    <p:commandButton value="Volver"
+                                     styleClass="logout-btn"
+                                     action="#{mensajeriaBean.volverListadooperario}"
+                                     ajax="false"/>
+                </h:form>
+            </div>
+        </header>
+
+        <main class="admin-dashboard">
+            <h2 style="text-align:center; margin-bottom:20px;">Agregar Mensajería</h2>
+
+            <h:form id="formAgregarMensajeria">
+                <p:panelGrid columns="2" styleClass="form-grid" columnClasses="label, value">
+
+                    <h:outputLabel value="Nombre Mensajería:" for="nombre"/>
+                    <p:inputText id="nombre" value="#{mensajeriaBean.mensajeria.nombre_mensajeria}" required="true"/>
+
+                    <h:outputLabel value="Teléfono:" for="telefono"/>
+                    <p:inputText id="telefono" value="#{mensajeriaBean.mensajeria.tel_mensajeria}" required="true"/>
+
+                    <h:outputLabel value="Dirección:" for="direccion"/>
+                    <p:inputText id="direccion" value="#{mensajeriaBean.mensajeria.direccion_mensajeria}" required="true" size="40"/>
+
+                    <h:outputLabel value="Cobertura:" for="cobertura"/>
+                    <p:inputText id="cobertura" value="#{mensajeriaBean.mensajeria.cobertura}" required="true"/>
+                </p:panelGrid>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <p:commandButton value="Guardar"
+                                     styleClass="logout-btn"
+                                     action="#{mensajeriaBean.guardarMensajeriaoperario}"
+                                     ajax="false"/>
+                </div>
+            </h:form>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Panel Administrativo</h3>
+                </div>
+                <div class="system-info">
+                    <p>© 2025 Tienda Naturista - Sistema de Administración</p>
+                </div>
+            </div>
+        </footer>
+    </h:body>
+</html>

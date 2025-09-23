@@ -181,4 +181,139 @@ public class MensajeriaBean implements Serializable {
             e.printStackTrace();
         }
     }
+    
+    public void irAgregarMensajeriaoperario() {
+        try {
+            mensajeria = new Mensajeria();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("agregarMensajeriaoperario.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void volverListadooperario() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("listarMensajeriaoperario.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void guardarMensajeriaoperario() {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "INSERT INTO mensajeria (nombre_mensajeria, tel_mensajeria, direccion_mensajeria, cobertura) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, mensajeria.getNombre_mensajeria());
+            ps.setLong(2, mensajeria.getTel_mensajeria());
+            ps.setString(3, mensajeria.getDireccion_mensajeria());
+            ps.setString(4, mensajeria.getCobertura());
+
+            ps.executeUpdate();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensajería registrada correctamente", null));
+
+            listarMensajeria();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("listarMensajeriaoperario.xhtml");
+
+        } catch (SQLException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error registrando mensajería", e.getMessage()));
+        }
+    }
+    
+    public void actualizarMensajeriaoperario() {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "UPDATE mensajeria SET nombre_mensajeria=?, tel_mensajeria=?, direccion_mensajeria=?, cobertura=? WHERE idmensajeria=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, mensajeria.getNombre_mensajeria());
+            ps.setLong(2, mensajeria.getTel_mensajeria());
+            ps.setString(3, mensajeria.getDireccion_mensajeria());
+            ps.setString(4, mensajeria.getCobertura());
+            ps.setInt(5, mensajeria.getIdmensajeria());
+
+            ps.executeUpdate();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensajería actualizada correctamente", null));
+
+            listarMensajeria();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("listarMensajeriaoperario.xhtml");
+
+        } catch (SQLException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error actualizando mensajería", e.getMessage()));
+        }
+    }
+    
+    public void editarMensajeriaoperario(Mensajeria m) {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "SELECT idmensajeria, nombre_mensajeria, tel_mensajeria, direccion_mensajeria, cobertura FROM mensajeria WHERE idmensajeria=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, m.getIdmensajeria());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Mensajeria mCompleta = new Mensajeria();
+                mCompleta.setIdmensajeria(rs.getInt("idmensajeria"));
+                mCompleta.setNombre_mensajeria(rs.getString("nombre_mensajeria"));
+                mCompleta.setTel_mensajeria(rs.getLong("tel_mensajeria"));
+                mCompleta.setDireccion_mensajeria(rs.getString("direccion_mensajeria"));
+                mCompleta.setCobertura(rs.getString("cobertura"));
+
+                this.mensajeria = mCompleta;
+            }
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect("editarMensajeriaoperario.xhtml");
+
+        } catch (SQLException | IOException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cargar mensajería", e.getMessage()));
+        }
+    }
+    
+    public void eliminarMensajeriaoperario(int id) {
+        try (Connection con = ConDB.conectar()) {
+            String sql = "DELETE FROM mensajeria WHERE idmensajeria=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensajería eliminada correctamente", null));
+
+            listarMensajeriaoperario();
+
+        } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error eliminando mensajería", e.getMessage()));
+        }
+    }
+    
+    public void listarMensajeriaoperario() {
+        listaMensajeria = new ArrayList<>();
+        try (Connection con = ConDB.conectar()) {
+            String sql = "SELECT idmensajeria, nombre_mensajeria, tel_mensajeria, direccion_mensajeria, cobertura FROM mensajeria";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Mensajeria m = new Mensajeria();
+                m.setIdmensajeria(rs.getInt("idmensajeria"));
+                m.setNombre_mensajeria(rs.getString("nombre_mensajeria"));
+                m.setTel_mensajeria(rs.getLong("tel_mensajeria"));
+                m.setDireccion_mensajeria(rs.getString("direccion_mensajeria"));
+                m.setCobertura(rs.getString("cobertura"));
+
+                listaMensajeria.add(m);
+            }
+        } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error listando mensajerías", e.getMessage()));
+        }
+    }
+    
+    
+    
+    
 }

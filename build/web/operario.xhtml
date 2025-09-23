@@ -44,11 +44,11 @@
                 <h:link outcome="/venta/listar" value="Ir a Ventas" styleClass="module-link"/>
             </div>
 
-            <div class="dashboard-module usuarios">
-                <div class="module-icon">👥</div>
-                <h2>Gestionar Usuarios</h2>
-                <p>Administra clientes registrados</p>
-                <h:link outcome="/usuario/listar" value="Ir a Usuarios" styleClass="module-link"/>
+            <div class="dashboard-module proveedores">
+                <div class="module-icon">🏢</div>
+                <h2>Gestionar Proveedores</h2>
+                <p>Administra perfiles de proveedores</p>
+                <h:link outcome="/proveedor/index" value="Ir a Proveedores" styleClass="module-link"/>
             </div>
 
             <div class="dashboard-module envios">
@@ -63,6 +63,20 @@
                 <h2>Gestionar Inventario</h2>
                 <p>Mantén un control preciso de tus productos y existencias</p>
                 <h:link outcome="/inventario/listar" value="Ir a Inventario" styleClass="module-link"/>
+            </div>
+            
+            <div class="dashboard-module mensajeria">
+                <div class="module-icon">📫</div>
+                <h2>Gestionar Mensajeria</h2>
+                <p>Mantén un control preciso de tus productos y existencias</p>
+                 <h:button value="Ir a Mensajeria" outcome="/mensajeria/listarMensajeriaoperario" styleClass="module-link"/>
+            </div>
+            
+            <div class="dashboard-module envios">
+                <div class="module-icon">🚚</div>
+                <h2>Envios</h2>
+                <p>Administra los envios</p>
+                <h:button value="Ir a Envios" outcome="/envios/listarEnviosoperario" styleClass="module-link"/>
             </div>
         </div>
     </main>
