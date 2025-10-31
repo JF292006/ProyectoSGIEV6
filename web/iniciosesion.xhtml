@@ -19,6 +19,7 @@
             <h2>Iniciar Sesión</h2>
             
             <h:form>
+                <h:messages globalOnly="true" style="color:red; margin-bottom:10px;" />
                 <div class="input-group">
                     <label for="correo">Correo *</label>
                     <h:inputText id="correo" value="#{usuariosBean.usuarios.correo}" required="true"/>
