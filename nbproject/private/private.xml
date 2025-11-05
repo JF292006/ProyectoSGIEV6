@@ -4,11 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/resources/css/estilosadmin.css</file>
-            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/index.xhtml</file>
-            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/admin.xhtml</file>
-            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/operario.xhtml</file>
-            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/iniciosesion.xhtml</file>
             <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/src/java/control/UsuariosBean.java</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/index.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/operario.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/admin.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/envios/agregarEnvio.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/envios/agregarEnviooperario.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/envios/editarEnviooperario.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/producto/nuevoprod.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/producto/index.xhtml</file>
+            <file>file:/C:/Users/User/Documents/ProyectoSGIEV/ProyectoSGIEV6/web/producto/indexoperario.xhtml</file>
         </group>
     </open-files>
 </project-private>

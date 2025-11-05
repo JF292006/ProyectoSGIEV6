@@ -111,9 +111,7 @@ public class UsuariosBean implements Serializable {
     }
     
     public String cerrarSesion() {
-    // Invalida toda la sesión
     FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-    // Retorna la página de login/index con redirect
     return "/index.xhtml?faces-redirect=true";
 }
 

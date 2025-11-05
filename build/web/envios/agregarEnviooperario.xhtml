@@ -25,13 +25,18 @@
 
         <h:form id="formEnvio">
 
-    <!-- Mensajes de validación -->
+    
     <p:messages id="msgs" closable="true" />
     
 
     <div class="form-group">
         <h:outputLabel value="Estado:" for="estado"/>
-        <p:inputText id="estado" value="#{enviosBean.envio.estado_envio}" required="true" />
+        <p:selectOneMenu id="estado" value="#{enviosBean.envio.estado_envio}" required="true">
+            <f:selectItem itemLabel="Seleccione un tipo" itemValue="" noSelectionOption="true"/>
+            <f:selectItem itemLabel="Entregado" itemValue="Entregado"/>
+            <f:selectItem itemLabel="En reparto" itemValue="En reparto"/>
+            <f:selectItem itemLabel="Sin Entregar" itemValue="Sin entregar"/>
+        </p:selectOneMenu>
     </div>
 
     <div class="form-group">
