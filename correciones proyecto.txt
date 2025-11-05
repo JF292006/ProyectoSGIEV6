@@ -1,0 +1,8 @@
+- mostrar tablero de anuncios en interfaz de ventas
+- cambiar logo
+- boton de ventas para operario redirige al registro de ventas directamente (Ajustar boton de redirección de guardado)(sin listado)
+- interfaz de proyecto cambiar a verde mas amigable
+- agregar interfaz de estadisticas
+- alertas de stock
+- listado de ventas realizadas por el id del usuario loggeado
+- registro de productos revamp (tipo de productos, registro sanitario, listado de proveedores)
